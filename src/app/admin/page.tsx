@@ -1,12 +1,13 @@
 'use client'
 
+
 export default function Home() {
 
 
   return (
-    <div>
-      
-    </div>
+    <>
+      <h1>AdminPanel</h1>
+    </>
   );
 }
 
