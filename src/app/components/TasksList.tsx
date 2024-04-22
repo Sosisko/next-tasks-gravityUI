@@ -13,20 +13,6 @@ interface tasksProps {
   tasks: ITasks[];
 }
 
-const dataSource: ITasks[] = [
-  {
-    id: 1,
-    number: 1,
-    date: "22.02.22",
-    company: "ООО уляля",
-    fio: "горбунков Смён Павлович",
-    phone: "89655082145",
-    comment: "Я еду еду",
-    status: "выполнено",
-    atiCode: 1234,
-  },
-];
-
 const columns: ColumnsType[] = [
   {
     title: "№ заявки",
@@ -77,9 +63,10 @@ const columns: ColumnsType[] = [
 ];
 
 export default function TasksList({ tasks }: tasksProps) {
+  const dataSource = tasks.map((task) => ({ ...task, key: task.id }));
   return (
     <div>
-      <Table columns={columns} dataSource={tasks} />
+      <Table columns={columns} dataSource={dataSource} />
     </div>
   );
 }
