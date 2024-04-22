@@ -1,12 +1,13 @@
+"use client";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { Button } from "antd";
-import type { TableColumnsType, TableProps } from "antd";
 import { ITasks } from "@/types/tasks";
 interface ColumnsType {
   title: string;
   dataIndex: string;
   key: string;
+  render?: () => React.ReactNode;
 }
 interface tasksProps {
   tasks: ITasks[];
@@ -66,13 +67,12 @@ const columns: ColumnsType[] = [
     title: "",
     dataIndex: "",
     key: "x",
-    // render: () => (
-    //   <>
-    //     <Button className="mr-2" icon={<EditOutlined />}></Button>
-    //     <Button danger icon={<DeleteOutlined />}></Button>
-    //   </>
-    // ),
-    // render: () => <a>Ссылка</a>,
+    render: () => (
+      <>
+        <Button className="mr-2" icon={<EditOutlined />}></Button>
+        <Button danger icon={<DeleteOutlined />}></Button>
+      </>
+    ),
   },
 ];
 
