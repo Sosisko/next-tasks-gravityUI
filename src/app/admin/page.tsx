@@ -4,6 +4,7 @@ import TasksList from "../components/TasksList";
 
 export default async function AdminPanel() {
   const tasks = await getAllTasks();
+
   return (
     <div className="container">
       <div className="flex items-center justify-center flex-col mt-6">

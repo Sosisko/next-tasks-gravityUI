@@ -1,21 +1,16 @@
 import { Modal } from "antd";
+import MyForm from "./MyForm";
+import { ITasks } from "@/types/tasks";
 
 interface ModalProps {
   isModalOpen: boolean;
-  handleOk: () => void;
   handleCancel: () => void;
 }
 
-export default function MyModal({
-  isModalOpen,
-  handleOk,
-  handleCancel,
-}: ModalProps) {
+export default function MyModal({ isModalOpen, handleCancel }: ModalProps) {
   return (
-    <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+    <Modal centered open={isModalOpen} onCancel={handleCancel} footer={null}>
+      <MyForm onCancel={handleCancel} />
     </Modal>
   );
 }

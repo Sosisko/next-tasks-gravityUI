@@ -3,6 +3,7 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
+import { useState } from "react";
 interface ColumnsType {
   title: string;
   dataIndex: string;
@@ -64,6 +65,7 @@ const columns: ColumnsType[] = [
 
 export default function TasksList({ tasks }: tasksProps) {
   const dataSource = tasks.map((task) => ({ ...task, key: task.id }));
+
   return (
     <div>
       <Table columns={columns} dataSource={dataSource} />

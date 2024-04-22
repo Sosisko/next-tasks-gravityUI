@@ -7,5 +7,5 @@ export interface ITasks {
   phone: string;
   comment: string;
   status: string;
-  atiCode: number;
+  atiCode: number | null;
 }
