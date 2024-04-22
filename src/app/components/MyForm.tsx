@@ -1,8 +1,8 @@
 import { addTask } from "@/api/api";
 import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
-
-import { Button, Form, Input, InputNumber, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
+import { MaskedInput } from "antd-mask-input";
 
 interface MyFormProps {
   onCancel: () => void;
@@ -90,16 +90,10 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
       </Form.Item>
       <Form.Item
         label="Телефон"
-        name="Phone"
-        rules={[
-          { required: true, message: "Please input your phone number!" },
-          {
-            pattern: /^(\d{3})-(\d{3})-(\d{4})$/,
-            message: "Invalid phone number format!",
-          },
-        ]}
+        name="phone"
+        rules={[{ required: true, message: "Введите номер телефона" }]}
       >
-        <Input />
+        <MaskedInput mask={"+7(000)0000-000"} />
       </Form.Item>
       <Form.Item
         label="Комментарий"
