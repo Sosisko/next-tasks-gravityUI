@@ -9,7 +9,6 @@ export default async function AdminPanel() {
     <div className="container">
       <div className="flex items-center justify-center flex-col mt-6">
         <h1 className="text-2xl font-bold">AdminPanel</h1>
-        <AddTask />
         <TasksList tasks={tasks} />
       </div>
     </div>

@@ -4,6 +4,8 @@ import { Table } from "antd";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { useState } from "react";
+import AddTask from "../components/AddTask";
+
 interface ColumnsType {
   title: string;
   dataIndex: string;
@@ -24,6 +26,11 @@ const columns: ColumnsType[] = [
     title: "Дата",
     dataIndex: "date",
     key: "date",
+  },
+  {
+    title: "Компания",
+    dataIndex: "company",
+    key: "company",
   },
   {
     title: "ФИО",
@@ -64,10 +71,21 @@ const columns: ColumnsType[] = [
 ];
 
 export default function TasksList({ tasks }: tasksProps) {
-  const dataSource = tasks.map((task) => ({ ...task, key: task.id }));
+  const [taskList, setTaskList] = useState(tasks);
+  const onAddtask = (newTask: ITasks) => {
+    setTaskList((prevTaskList) => [...prevTaskList, newTask]);
+    console.log(newTask);
+  };
+
+  const dataSource = taskList.map((task) => ({
+    ...task,
+    key: task.id,
+    number: task.id,
+  }));
 
   return (
     <div>
+      <AddTask onAddtask={onAddtask} />
       <Table columns={columns} dataSource={dataSource} />
     </div>
   );

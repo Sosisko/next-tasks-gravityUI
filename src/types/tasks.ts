@@ -5,7 +5,7 @@ export interface ITasks {
   company: string;
   fio: string;
   phone: string;
-  comment: string;
+  comment?: string;
   status: string;
   atiCode: number | null;
 }

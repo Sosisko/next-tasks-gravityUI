@@ -13,7 +13,7 @@ export const getAllTasks = async (): Promise<ITasks[]> => {
   }
 };
 
-export const addTask = async (task: ITasks): Promise<ITasks[]> => {
+export const addTask = async (task: ITasks): Promise<ITasks> => {
   try {
     const response = await fetch(`${baseUrl}/tasks`, {
       method: "POST",
@@ -26,6 +26,6 @@ export const addTask = async (task: ITasks): Promise<ITasks[]> => {
     return data;
   } catch (error) {
     console.error(error);
-    return [];
+    return {} as ITasks;
   }
 };
