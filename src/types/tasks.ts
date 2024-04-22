@@ -1,5 +1,11 @@
 export interface ITasks {
-    id: number
-    name: string
-    company: string
+  id: number;
+  number: number;
+  date: string;
+  company: string;
+  fio: string;
+  phone: string;
+  comment: string;
+  status: string;
+  atiCode: number;
 }
