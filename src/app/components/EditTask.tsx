@@ -1,27 +1,31 @@
-import { Modal, Form, Input, Select, FormProps, Button } from "antd";
+import { Modal, Form, Input, Select, Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { updateTask } from "@/api/api";
 import { MaskedInput } from "antd-mask-input";
+import { useEffect } from "react";
 
 interface EditTaskProps {
   isModalOpen: boolean;
-  handleOk: (task: ITasks) => void;
+  handleEditTask: (task: ITasks) => void;
   handleCancel: () => void;
   task: ITasks;
-
 }
 
 const { Option } = Select;
 
 const EditTask: React.FC<EditTaskProps> = ({
   isModalOpen,
-  handleOk,
+  handleEditTask,
   handleCancel,
   task,
-
 }) => {
   const [form] = Form.useForm();
+  useEffect(() => {
+    form.setFieldsValue(task);
+  }, [form, task]);
+
   console.log(task);
+
   const onFinish = (values: ITasks) => {
     const newValues = {
       ...values,
@@ -35,10 +39,9 @@ const EditTask: React.FC<EditTaskProps> = ({
       }),
       number: task.id,
     };
-    handleOk(newValues);
+    handleEditTask(newValues);
     console.log(newValues);
     updateTask(newValues);
-
   };
 
   const validatePhoneNumber = (rule: any, value: any) => {

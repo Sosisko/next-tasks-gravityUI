@@ -88,7 +88,6 @@ export default function TasksList({ tasks }: tasksProps) {
 
   const onAddtask = (newTask: ITasks) => {
     setTaskList((prevTaskList) => [...prevTaskList, newTask]);
-    console.log(newTask);
   };
 
   const onEditTask = (id: number) => {
@@ -96,7 +95,6 @@ export default function TasksList({ tasks }: tasksProps) {
     if (taskToEdit) {
       setIsEditTaskOpen(true);
       setCurrentTask(taskToEdit);
-      console.log(taskToEdit);
     }
   };
 
@@ -124,15 +122,22 @@ export default function TasksList({ tasks }: tasksProps) {
       taskList.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
     setIsEditTaskOpen(false);
+    setCurrentTask(null);
   };
+
+  const handleCancel = () => {
+    setIsEditTaskOpen(false);
+    setCurrentTask(null);
+  };
+
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
       <Table columns={columns} dataSource={dataSource} />
       <EditTask
         isModalOpen={isEditTaskOpen}
-        handleOk={handleEditTask}
-        handleCancel={() => setIsEditTaskOpen(false)}
+        handleEditTask={handleEditTask}
+        handleCancel={handleCancel}
         task={currentTask || ({} as ITasks)}
       />
     </div>
