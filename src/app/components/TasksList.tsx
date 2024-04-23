@@ -27,8 +27,8 @@ export default function TasksList({ tasks }: tasksProps) {
   const columns: ColumnsType[] = [
     {
       title: "№ заявки",
-      dataIndex: "number",
-      key: "number",
+      dataIndex: "idx",
+      key: "idx",
     },
     {
       title: "Дата",
@@ -105,8 +105,9 @@ export default function TasksList({ tasks }: tasksProps) {
     }
   };
 
-  const dataSource = taskList.map((task) => ({
+  const dataSource = taskList.map((task, idx) => ({
     ...task,
+    idx: ++idx,
     key: task.id,
     number: task.id,
     fio: `${task.secondname} ${task.name} ${task.surname}`,

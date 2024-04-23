@@ -8,7 +8,7 @@ import React from "react";
 interface tasksProps {
   tasks: ITasks[];
 }
-
+const theme = "light";
 const select = (
   <Select defaultValue={["val_1"]}>
     <Select.Option value="val_1">Value 1</Select.Option>
@@ -28,19 +28,34 @@ const data = [
 
 // const columns = [{ id: "id" }, { id: "text" }, { id: "age" }];
 const columns = [
-  { id: "id", name: "Номер заявки" },
-  { id: "name", name: "ФИО" },
+  { id: "id", name: "№ заявки" },
+  { id: "date", name: "Дата" },
+  { id: "fio", name: "ФИО" },
   { id: "company", name: "Название компании" },
+  { id: "phone", name: "Телефон" },
+
   { id: "status", name: "Статус" },
+  { id: "atiCode", name: "ATI код" },
 ];
 
 const MyTable: React.FC<tasksProps> = ({ tasks }) => {
-  const theme = "light";
+  const data = tasks.map((task) => {
+    return {
+      ...task,
+      fio: `${task.secondname} ${task.name} ${task.surname}`,
+      atiCode: (
+        <a target="_blank" href={`https://ati.su/firms/${task.atiCode}/info`}>
+          {task.atiCode}
+        </a>
+      ),
+    };
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <Table
         columns={columns}
-        data={tasks}
+        data={data}
         className="w-full flex justify-center"
       />
     </ThemeProvider>
