@@ -2,7 +2,7 @@
 import { addTask } from "@/api/api";
 import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, InputNumber, Select } from "antd";
 import { MaskedInput } from "antd-mask-input";
 import { useEffect } from "react";
 
@@ -117,8 +117,6 @@ export default function MyForm({
         rules={[
           { required: true, message: "Введите номер телефона" },
           { validator: validatePhoneNumber, message: "Номер слишком короткий" },
-          // { type: "number", min: 3, message: "Номер слишком короткий" },
-          // { type: "number", max: 10, message: "Номер слишком длинный" },
         ]}
       >
         <MaskedInput mask={"+7(000)0000-000"} />
@@ -142,6 +140,24 @@ export default function MyForm({
           <Option value="В работе">В работе</Option>
           <Option value="Завершено">Завершено</Option>
         </Select>
+      </Form.Item>
+      <Form.Item
+        label="Код ATI"
+        name="atiCode"
+        rules={[
+          {
+            required: true,
+            message: "Введите код ATI",
+          },
+          {
+            message: "Код должен быть из цифр",
+            pattern: new RegExp(/^[0-9]+$/),
+          },
+          { min: 4, message: "Минимум 4 цифры" },
+          { max: 6, message: "максимум 6 цифр" },
+        ]}
+      >
+        <Input />
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 12, span: 16 }}>
