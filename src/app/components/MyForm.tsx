@@ -1,3 +1,4 @@
+"use client";
 import { addTask } from "@/api/api";
 import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
@@ -9,7 +10,9 @@ interface MyFormProps {
   onAddtask: (task: ITasks) => void;
 }
 const { Option } = Select;
+
 export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
+  const [form] = Form.useForm();
   const onFinish: FormProps["onFinish"] = async (values) => {
     const capitalFirstLetter = (str: string) =>
       str.charAt(0).toUpperCase() + str.slice(1);
@@ -40,6 +43,8 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
 
       console.log("New task added:", newTask);
       onAddtask(newTask);
+      form.resetFields();
+      onCancel();
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -49,6 +54,7 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
   };
   return (
     <Form
+      form={form}
       name="basic"
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 16 }}
