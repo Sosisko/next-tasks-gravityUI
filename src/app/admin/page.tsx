@@ -1,5 +1,4 @@
 import { getAllTasks } from "@/api/api";
-import AddTask from "../components/AddTask";
 import TasksList from "../components/TasksList";
 
 export default async function AdminPanel() {

@@ -81,6 +81,11 @@ export default function TasksList({ tasks }: tasksProps) {
     ...task,
     key: task.id,
     number: task.id,
+    atiCode: (
+      <a target="_blank" href={`https://ati.su/firms/${task.atiCode}/info`}>
+        {task.atiCode}
+      </a>
+    ),
   }));
 
   return (
