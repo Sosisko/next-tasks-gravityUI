@@ -4,8 +4,10 @@ import { Table } from "antd";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { useState } from "react";
-import AddTask from "../components/AddTask";
 import { deleteTask } from "@/api/api";
+import { updateTask } from "@/api/api";
+import AddTask from "../components/AddTask";
+import EditTask from "./EditTask";
 
 interface ColumnsType {
   title: string;
@@ -18,6 +20,10 @@ interface tasksProps {
 }
 
 export default function TasksList({ tasks }: tasksProps) {
+  const [taskList, setTaskList] = useState(tasks);
+  const [isEditTaskOpen, setIsEditTaskOpen] = useState<boolean>(false);
+  const [currentTask, setCurrentTask] = useState<ITasks | null>(null);
+
   const columns: ColumnsType[] = [
     {
       title: "№ заявки",
@@ -65,7 +71,11 @@ export default function TasksList({ tasks }: tasksProps) {
       key: "x",
       render: (record) => (
         <>
-          <Button className="mr-2" icon={<EditOutlined />}></Button>
+          <Button
+            onClick={() => onEditTask(record.id)}
+            className="mr-2"
+            icon={<EditOutlined />}
+          ></Button>
           <Button
             onClick={() => onDeleteTask(record.id)}
             danger
@@ -76,10 +86,18 @@ export default function TasksList({ tasks }: tasksProps) {
     },
   ];
 
-  const [taskList, setTaskList] = useState(tasks);
   const onAddtask = (newTask: ITasks) => {
     setTaskList((prevTaskList) => [...prevTaskList, newTask]);
     console.log(newTask);
+  };
+
+  const onEditTask = (id: number) => {
+    const taskToEdit = taskList.find((task) => task.id === id);
+    if (taskToEdit) {
+      setIsEditTaskOpen(true);
+      setCurrentTask(taskToEdit);
+      console.log(taskToEdit);
+    }
   };
 
   const onDeleteTask = (id: number) => {
@@ -93,6 +111,7 @@ export default function TasksList({ tasks }: tasksProps) {
     ...task,
     key: task.id,
     number: task.id,
+    fio: `${task.secondname} ${task.name} ${task.surname}`,
     atiCode: (
       <a target="_blank" href={`https://ati.su/firms/${task.atiCode}/info`}>
         {task.atiCode}
@@ -100,10 +119,22 @@ export default function TasksList({ tasks }: tasksProps) {
     ),
   }));
 
+  const handleEditTask = (updatedTask: ITasks) => {
+    setTaskList(
+      taskList.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+    setIsEditTaskOpen(false);
+  };
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
       <Table columns={columns} dataSource={dataSource} />
+      <EditTask
+        isModalOpen={isEditTaskOpen}
+        handleOk={handleEditTask}
+        handleCancel={() => setIsEditTaskOpen(false)}
+        task={currentTask || ({} as ITasks)}
+      />
     </div>
   );
 }

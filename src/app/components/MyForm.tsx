@@ -10,6 +10,8 @@ interface MyFormProps {
   onCancel: () => void;
   onAddtask: (task: ITasks) => void;
   isModalOpen: boolean;
+  newTaskValue: string;
+  setNewTaskValue: (value: string) => void;
 }
 const { Option } = Select;
 
@@ -17,6 +19,8 @@ export default function MyForm({
   onCancel,
   onAddtask,
   isModalOpen,
+  newTaskValue,
+  setNewTaskValue,
 }: MyFormProps) {
   const [form] = Form.useForm();
   const handleCancel = () => {
@@ -24,24 +28,23 @@ export default function MyForm({
     onCancel(); // Закрыть модальное окно
   };
   const onFinish: FormProps["onFinish"] = async (values) => {
-    const capitalFirstLetter = (str: string) =>
-      str.charAt(0).toUpperCase() + str.slice(1);
+    // const capitalFirstLetter = (str: string) =>
+    //   str.charAt(0).toUpperCase() + str.slice(1);
 
-    const fullName = `${capitalFirstLetter(
-      values.secondname.trim()
-    )} ${capitalFirstLetter(values.name.trim())} ${capitalFirstLetter(
-      values.surname.trim()
-    )}`;
+    // const fullName = `${capitalFirstLetter(
+    //   values.secondname.trim()
+    // )} ${capitalFirstLetter(values.name.trim())} ${capitalFirstLetter(
+    //   values.surname.trim()
+    // )}`;
 
-    const newValues = { ...values };
-    delete newValues.secondname;
-    delete newValues.name;
-    delete newValues.surname;
+    // const newValues = { ...values };
+    // delete newValues.secondname;
+    // delete newValues.name;
+    // delete newValues.surname;
 
     try {
       const newTask = await addTask({
-        ...newValues,
-        fio: fullName,
+        ...values,
         date: new Date(Date.now()).toLocaleString("ru-RU", {
           year: "numeric",
           month: "2-digit",

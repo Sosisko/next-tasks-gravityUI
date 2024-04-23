@@ -35,15 +35,19 @@ export const deleteTask = async (id: number): Promise<void> => {
     method: "DELETE",
   });
 };
-// export const deleteTask = async (id: number): Promise<ITasks> => {
-//   try {
-//     const response = await fetch(`${baseUrl}/tasks/${id}`, {
-//       method: "DELETE",
-//     });
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error(error);
-//     return {} as ITasks;
-//   }
-// };
+export const updateTask = async (updatedTask: ITasks): Promise<ITasks> => {
+  try {
+    const response = await fetch(`${baseUrl}/tasks/${updatedTask.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTask),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    return {} as ITasks;
+  }
+};

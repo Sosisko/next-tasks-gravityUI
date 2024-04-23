@@ -11,6 +11,11 @@ interface addTasksProps {
 
 export default function AddTask({ onAddtask }: addTasksProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [newTaskValue, setNewTaskValue] = useState<string>("");
+
+  const handleSubmitNewTask = () => {
+    console.log(newTaskValue);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -28,6 +33,8 @@ export default function AddTask({ onAddtask }: addTasksProps) {
         onAddtask={onAddtask}
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
+        newTaskValue={newTaskValue}
+        setNewTaskValue={setNewTaskValue}
       />
     </>
   );
