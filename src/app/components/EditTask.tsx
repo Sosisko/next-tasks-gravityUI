@@ -24,8 +24,6 @@ const EditTask: React.FC<EditTaskProps> = ({
     form.setFieldsValue(task);
   }, [form, task]);
 
-  console.log(task);
-
   const onFinish = (values: ITasks) => {
     const newValues = {
       ...values,
@@ -57,6 +55,7 @@ const EditTask: React.FC<EditTaskProps> = ({
       open={isModalOpen}
       title="Редактирование заявки"
       onCancel={handleCancel}
+      footer={null}
     >
       <Form
         form={form}

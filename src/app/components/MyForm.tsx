@@ -4,7 +4,6 @@ import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
 import { Button, Form, Input, InputNumber, Select } from "antd";
 import { MaskedInput } from "antd-mask-input";
-import { useEffect } from "react";
 
 interface MyFormProps {
   onCancel: () => void;
@@ -15,33 +14,13 @@ interface MyFormProps {
 }
 const { Option } = Select;
 
-export default function MyForm({
-  onCancel,
-  onAddtask,
-  isModalOpen,
-  newTaskValue,
-  setNewTaskValue,
-}: MyFormProps) {
+export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
   const [form] = Form.useForm();
   const handleCancel = () => {
     form.resetFields(); // Сбросить поля формы
     onCancel(); // Закрыть модальное окно
   };
   const onFinish: FormProps["onFinish"] = async (values) => {
-    // const capitalFirstLetter = (str: string) =>
-    //   str.charAt(0).toUpperCase() + str.slice(1);
-
-    // const fullName = `${capitalFirstLetter(
-    //   values.secondname.trim()
-    // )} ${capitalFirstLetter(values.name.trim())} ${capitalFirstLetter(
-    //   values.surname.trim()
-    // )}`;
-
-    // const newValues = { ...values };
-    // delete newValues.secondname;
-    // delete newValues.name;
-    // delete newValues.surname;
-
     try {
       const newTask = await addTask({
         ...values,

@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/router";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { Button } from "antd";
@@ -130,10 +131,18 @@ export default function TasksList({ tasks }: tasksProps) {
     setCurrentTask(null);
   };
 
+  const showTask = (id: number) => {
+    console.log(id);
+  };
+
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
-      <Table columns={columns} dataSource={dataSource} />
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        onRow={(item) => ({ onClick: () => showTask(item.id) })}
+      />
       <EditTask
         isModalOpen={isEditTaskOpen}
         handleEditTask={handleEditTask}
