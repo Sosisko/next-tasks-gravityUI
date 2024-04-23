@@ -1,4 +1,3 @@
-"use client";
 import { addTask } from "@/api/api";
 import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
@@ -52,6 +51,12 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
   const onFinishFailed: FormProps["onFinishFailed"] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+  const validatePhoneNumber = (rule: any, value: any) => {
+    if (typeof value === "string" && value.replace(/\D/g, "").length < 11) {
+      return Promise.reject(new Error("Номер слишком короткий"));
+    }
+    return Promise.resolve();
+  };
   return (
     <Form
       form={form}
@@ -97,7 +102,12 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
       <Form.Item
         label="Телефон"
         name="phone"
-        rules={[{ required: true, message: "Введите номер телефона" }]}
+        rules={[
+          { required: true, message: "Введите номер телефона" },
+          { validator: validatePhoneNumber, message: "Номер слишком короткий" },
+          // { type: "number", min: 3, message: "Номер слишком короткий" },
+          // { type: "number", max: 10, message: "Номер слишком длинный" },
+        ]}
       >
         <MaskedInput mask={"+7(000)0000-000"} />
       </Form.Item>
