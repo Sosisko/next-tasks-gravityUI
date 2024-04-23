@@ -1,17 +1,28 @@
+"use client";
 import { addTask } from "@/api/api";
 import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
 import { Button, Form, Input, Select } from "antd";
 import { MaskedInput } from "antd-mask-input";
+import { useEffect } from "react";
 
 interface MyFormProps {
   onCancel: () => void;
   onAddtask: (task: ITasks) => void;
+  isModalOpen: boolean;
 }
 const { Option } = Select;
 
-export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
+export default function MyForm({
+  onCancel,
+  onAddtask,
+  isModalOpen,
+}: MyFormProps) {
   const [form] = Form.useForm();
+  const handleCancel = () => {
+    form.resetFields(); // Сбросить поля формы
+    onCancel(); // Закрыть модальное окно
+  };
   const onFinish: FormProps["onFinish"] = async (values) => {
     const capitalFirstLetter = (str: string) =>
       str.charAt(0).toUpperCase() + str.slice(1);
@@ -43,7 +54,7 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
       console.log("New task added:", newTask);
       onAddtask(newTask);
       form.resetFields();
-      onCancel();
+      handleCancel();
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -57,6 +68,7 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
     }
     return Promise.resolve();
   };
+
   return (
     <Form
       form={form}
@@ -136,7 +148,7 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
         <Button className="mr-4" type="primary" htmlType="submit">
           Сохранить
         </Button>
-        <Button danger onClick={onCancel}>
+        <Button danger onClick={handleCancel}>
           Отмена
         </Button>
       </Form.Item>
