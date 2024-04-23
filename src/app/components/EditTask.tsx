@@ -25,8 +25,15 @@ const EditTask: React.FC<EditTaskProps> = ({
   }, [form, task]);
 
   const onFinish = (values: ITasks) => {
+    function capitFirstLet(str: string) {
+      return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    }
     const newValues = {
       ...values,
+      name: capitFirstLet(values.name.trim()),
+      secondname: capitFirstLet(values.secondname.trim()),
+      surname: capitFirstLet(values.surname.trim()),
+      company: values.company.trim(),
       id: task.id,
       date: new Date(Date.now()).toLocaleString("ru-RU", {
         year: "numeric",
@@ -38,7 +45,6 @@ const EditTask: React.FC<EditTaskProps> = ({
       number: task.id,
     };
     handleEditTask(newValues);
-    console.log(newValues);
     updateTask(newValues);
   };
 

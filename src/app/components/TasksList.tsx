@@ -1,12 +1,11 @@
 "use client";
-import { useRouter } from "next/router";
+
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { useState } from "react";
 import { deleteTask } from "@/api/api";
-import { updateTask } from "@/api/api";
 import AddTask from "../components/AddTask";
 import EditTask from "./EditTask";
 
@@ -21,7 +20,6 @@ interface tasksProps {
 }
 
 export default function TasksList({ tasks }: tasksProps) {
-  const router = useRouter();
   const [taskList, setTaskList] = useState(tasks);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState<boolean>(false);
   const [currentTask, setCurrentTask] = useState<ITasks | null>(null);
@@ -132,24 +130,19 @@ export default function TasksList({ tasks }: tasksProps) {
     setCurrentTask(null);
   };
 
-  const showTaskDetail = (id: number) => {
-    router.push(`/task-detail/${id}`);
-  };
+  const showTaskDetail = (id: number) => {};
 
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        onRow={(item) => ({ onClick: () => showTaskDetail(item.id) })}
-      />
+      <Table columns={columns} dataSource={dataSource} />
       <EditTask
         isModalOpen={isEditTaskOpen}
         handleEditTask={handleEditTask}
         handleCancel={handleCancel}
         task={currentTask || ({} as ITasks)}
       />
+      <p>Количество заявок: {taskList.length}</p>
     </div>
   );
 }

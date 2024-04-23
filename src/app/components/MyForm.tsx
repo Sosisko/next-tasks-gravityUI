@@ -21,9 +21,19 @@ export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
     onCancel(); // Закрыть модальное окно
   };
   const onFinish: FormProps["onFinish"] = async (values) => {
+    function capitFirstLet(str: string) {
+      return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    const newValues = {
+      ...values,
+      name: capitFirstLet(values.name.trim()),
+      secondname: capitFirstLet(values.secondname.trim()),
+      surname: capitFirstLet(values.surname.trim()),
+      company: values.company.trim(),
+    };
     try {
       const newTask = await addTask({
-        ...values,
+        ...newValues,
         date: new Date(Date.now()).toLocaleString("ru-RU", {
           year: "numeric",
           month: "2-digit",
