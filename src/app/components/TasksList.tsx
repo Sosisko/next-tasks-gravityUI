@@ -21,6 +21,7 @@ interface tasksProps {
 }
 
 export default function TasksList({ tasks }: tasksProps) {
+  const router = useRouter();
   const [taskList, setTaskList] = useState(tasks);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState<boolean>(false);
   const [currentTask, setCurrentTask] = useState<ITasks | null>(null);
@@ -131,8 +132,8 @@ export default function TasksList({ tasks }: tasksProps) {
     setCurrentTask(null);
   };
 
-  const showTask = (id: number) => {
-    console.log(id);
+  const showTaskDetail = (id: number) => {
+    router.push(`/task-detail/${id}`);
   };
 
   return (
@@ -141,7 +142,7 @@ export default function TasksList({ tasks }: tasksProps) {
       <Table
         columns={columns}
         dataSource={dataSource}
-        onRow={(item) => ({ onClick: () => showTask(item.id) })}
+        onRow={(item) => ({ onClick: () => showTaskDetail(item.id) })}
       />
       <EditTask
         isModalOpen={isEditTaskOpen}
