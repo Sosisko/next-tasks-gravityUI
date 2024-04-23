@@ -2,7 +2,13 @@
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { ITasks } from "@/types/tasks";
-import { Button, Select, Table, ThemeProvider } from "@gravity-ui/uikit";
+import {
+  Button,
+  Select,
+  Table,
+  ThemeProvider,
+  withTableSorting,
+} from "@gravity-ui/uikit";
 import React from "react";
 
 interface tasksProps {
@@ -21,27 +27,26 @@ const select = (
 const button = <Button view="outlined">Button</Button>;
 const getRowId = "id";
 
-const data = [
-  { id: 1, name: "Hello", company: button, status: select },
-  { id: 2, name: "World", company: button, status: select },
-];
-
-// const columns = [{ id: "id" }, { id: "text" }, { id: "age" }];
+const MyTable = withTableSorting(Table);
 const columns = [
-  { id: "id", name: "№ заявки" },
-  { id: "date", name: "Дата" },
-  { id: "fio", name: "ФИО" },
+  {
+    id: "idx",
+    name: "№ заявки",
+    meta: { sort: true },
+  },
+  { id: "date", name: "Дата", meta: { sort: true } },
+  { id: "fio", name: "ФИО", meta: { sort: true } },
   { id: "company", name: "Название компании" },
   { id: "phone", name: "Телефон" },
-
   { id: "status", name: "Статус" },
   { id: "atiCode", name: "ATI код" },
 ];
 
-const MyTable: React.FC<tasksProps> = ({ tasks }) => {
-  const data = tasks.map((task) => {
+const WatchTable: React.FC<tasksProps> = ({ tasks }) => {
+  const data = tasks.map((task, idx) => {
     return {
       ...task,
+      idx: ++idx,
       fio: `${task.secondname} ${task.name} ${task.surname}`,
       atiCode: (
         <a target="_blank" href={`https://ati.su/firms/${task.atiCode}/info`}>
@@ -52,14 +57,16 @@ const MyTable: React.FC<tasksProps> = ({ tasks }) => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <Table
-        columns={columns}
-        data={data}
-        className="w-full flex justify-center"
-      />
-    </ThemeProvider>
+    <div className="mt-6">
+      <ThemeProvider theme={theme}>
+        <MyTable
+          columns={columns}
+          data={data}
+          className="w-full flex justify-center"
+        />
+      </ThemeProvider>
+    </div>
   );
 };
 
-export default MyTable;
+export default WatchTable;
