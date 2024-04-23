@@ -29,3 +29,21 @@ export const addTask = async (task: ITasks): Promise<ITasks> => {
     return {} as ITasks;
   }
 };
+
+export const deleteTask = async (id: number): Promise<void> => {
+  await fetch(`${baseUrl}/tasks/${id}`, {
+    method: "DELETE",
+  });
+};
+// export const deleteTask = async (id: number): Promise<ITasks> => {
+//   try {
+//     const response = await fetch(`${baseUrl}/tasks/${id}`, {
+//       method: "DELETE",
+//     });
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error(error);
+//     return {} as ITasks;
+//   }
+// };
