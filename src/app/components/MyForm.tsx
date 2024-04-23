@@ -17,13 +17,13 @@ const { Option } = Select;
 export default function MyForm({ onCancel, onAddtask }: MyFormProps) {
   const [form] = Form.useForm();
   const handleCancel = () => {
-    form.resetFields(); // Сбросить поля формы
-    onCancel(); // Закрыть модальное окно
+    form.resetFields();
+    onCancel();
   };
+
   const onFinish: FormProps["onFinish"] = async (values) => {
-    function capitFirstLet(str: string) {
-      return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-    }
+    const capitFirstLet = (str: string) =>
+      str.charAt(0).toUpperCase() + str.slice(1);
     const newValues = {
       ...values,
       name: capitFirstLet(values.name.trim()),

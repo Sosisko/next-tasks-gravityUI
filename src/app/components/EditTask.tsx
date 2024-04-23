@@ -25,9 +25,8 @@ const EditTask: React.FC<EditTaskProps> = ({
   }, [form, task]);
 
   const onFinish = (values: ITasks) => {
-    function capitFirstLet(str: string) {
-      return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-    }
+    const capitFirstLet = (str: string) =>
+      str.charAt(0).toUpperCase() + str.slice(1);
     const newValues = {
       ...values,
       name: capitFirstLet(values.name.trim()),

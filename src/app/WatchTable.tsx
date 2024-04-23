@@ -1,4 +1,6 @@
 "use client";
+import "@gravity-ui/uikit/styles/fonts.css";
+import "@gravity-ui/uikit/styles/styles.css";
 import { ITasks } from "@/types/tasks";
 import { Button, Select, Table, ThemeProvider } from "@gravity-ui/uikit";
 import React from "react";
