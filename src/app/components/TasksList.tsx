@@ -130,8 +130,6 @@ export default function TasksList({ tasks }: tasksProps) {
     setCurrentTask(null);
   };
 
-  const showTaskDetail = (id: number) => {};
-
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
