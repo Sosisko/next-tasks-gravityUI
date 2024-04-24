@@ -112,7 +112,15 @@ export default function TasksList({ tasks, router }: tasksProps) {
 
   const dataSource = taskList.map((task, idx) => ({
     ...task,
-    idx: ++idx,
+    // idx: ++idx,
+    idx: (
+      <a
+        onClick={() => router.push(`/task-detail/${task.id}`)}
+        className="cursor-pointer"
+      >
+        {++idx}
+      </a>
+    ),
     key: task.id,
     number: task.id,
     fio: `${task.secondname} ${task.name} ${task.surname}`,
@@ -142,9 +150,9 @@ export default function TasksList({ tasks, router }: tasksProps) {
       <Table
         columns={columns}
         dataSource={dataSource}
-        onRow={(item) => ({
-          onClick: () => router.push(`/task-detail/${item.id}`),
-        })}
+        // onRow={(item) => ({
+        //   onClick: () => router.push(`/task-detail/${item.id}`),
+        // })}
       />
       <EditTask
         isModalOpen={isEditTaskOpen}
