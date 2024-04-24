@@ -2,30 +2,13 @@
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { ITasks } from "@/types/tasks";
-import {
-  Button,
-  Select,
-  Table,
-  ThemeProvider,
-  withTableSorting,
-} from "@gravity-ui/uikit";
+import { Table, ThemeProvider, withTableSorting } from "@gravity-ui/uikit";
 import React from "react";
 
 interface tasksProps {
   tasks: ITasks[];
 }
 const theme = "light";
-const select = (
-  <Select defaultValue={["val_1"]}>
-    <Select.Option value="val_1">Value 1</Select.Option>
-    <Select.Option value="val_2">Value 2</Select.Option>
-    <Select.Option value="val_3">Value 3</Select.Option>
-    <Select.Option value="val_4">Value 4</Select.Option>
-  </Select>
-);
-
-const button = <Button view="outlined">Button</Button>;
-const getRowId = "id";
 
 const MyTable = withTableSorting(Table);
 const columns = [

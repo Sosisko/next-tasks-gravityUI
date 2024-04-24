@@ -3,14 +3,16 @@ import { getAllTasks } from "@/api/api";
 import WatchTable from "./WatchTable";
 import { useEffect, useState } from "react";
 import { ITasks } from "@/types/tasks";
+import { Loader, ThemeProvider } from "@gravity-ui/uikit";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITasks[]>([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       const fetchedTasks = await getAllTasks();
       setTasks(fetchedTasks);
+      setIsLoading(false);
     };
 
     fetchData();
@@ -18,7 +20,15 @@ export default function Home() {
   console.log(tasks);
   return (
     <div className="container">
-      <WatchTable tasks={tasks} />
+      {isLoading ? (
+        <ThemeProvider theme="light">
+          <div className="flex justify-center items-center">
+            <Loader size="l" />
+          </div>
+        </ThemeProvider>
+      ) : (
+        <WatchTable tasks={tasks} />
+      )}
     </div>
   );
 }
