@@ -4,7 +4,7 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Table } from "antd";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";
 import EditTask from "./EditTask";
@@ -17,12 +17,17 @@ interface ColumnsType {
 }
 interface tasksProps {
   tasks: ITasks[];
+  router: any;
 }
 
-export default function TasksList({ tasks }: tasksProps) {
+export default function TasksList({ tasks, router }: tasksProps) {
   const [taskList, setTaskList] = useState(tasks);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState<boolean>(false);
   const [currentTask, setCurrentTask] = useState<ITasks | null>(null);
+
+  useEffect(() => {
+    setTaskList(tasks);
+  }, [tasks]);
 
   const columns: ColumnsType[] = [
     {
@@ -134,7 +139,13 @@ export default function TasksList({ tasks }: tasksProps) {
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
-      <Table columns={columns} dataSource={dataSource} />
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        onRow={(item) => ({
+          onClick: () => router.push(`/task-detail/${item.id}`),
+        })}
+      />
       <EditTask
         isModalOpen={isEditTaskOpen}
         handleEditTask={handleEditTask}

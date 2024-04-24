@@ -51,3 +51,16 @@ export const updateTask = async (updatedTask: ITasks): Promise<ITasks> => {
     return {} as ITasks;
   }
 };
+
+export const getTask = async (id: number): Promise<ITasks> => {
+  try {
+    const response = await fetch(`${baseUrl}/tasks/${id}`, {
+      cache: "no-store",
+    });
+    const task = await response.json();
+    return task;
+  } catch (error) {
+    console.error(error);
+    return {} as ITasks;
+  }
+};
