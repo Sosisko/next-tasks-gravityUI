@@ -2,7 +2,7 @@
 import { addTask } from "@/api/api";
 import { ITasks } from "@/types/tasks";
 import type { FormProps } from "antd";
-import { Button, Form, Input, InputNumber, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { MaskedInput } from "antd-mask-input";
 
 interface MyFormProps {

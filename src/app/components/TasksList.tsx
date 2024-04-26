@@ -1,7 +1,5 @@
 "use client";
 
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-// import { Table } from "antd";
 import {
   Table,
   TableAction,

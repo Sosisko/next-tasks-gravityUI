@@ -4,7 +4,7 @@ import { Icon } from "@gravity-ui/uikit";
 import { useState } from "react";
 import MyModal from "./MyModal";
 import { ITasks } from "@/types/tasks";
-import PlusIcon from "./ui/PlusIcon";
+import { SquarePlus } from "@gravity-ui/icons";
 
 interface addTasksProps {
   onAddtask: (task: ITasks) => void;
@@ -24,9 +24,14 @@ export default function AddTask({ onAddtask }: addTasksProps) {
   return (
     <>
       <div className="flex justify-end">
-        <Button onClick={showModal} view="raised" className="mt-4 mb-6">
+        <Button
+          onClick={showModal}
+          view="raised"
+          size="l"
+          className="mt-4 mb-6"
+        >
           Добавить заявку
-          <Icon data={PlusIcon} size={18} />
+          <Icon data={SquarePlus} size={18} />
         </Button>
       </div>
 
