@@ -1,12 +1,32 @@
 "use client";
-
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Select, TextArea, TextInput, ThemeProvider } from "@gravity-ui/uikit";
 import { useState } from "react";
+
+const formSchema = z.object({
+  name: z.string().min(1, "Это поле обязательно"),
+  secondname: z.string().min(1, "Это поле обязательно"),
+  surname: z.string().min(1, "Это поле обязательно"),
+  company: z.string().min(1, "Это поле обязательно"),
+  phone: z.string().min(1, "Это поле обязательно"),
+  comment: z.string().optional(),
+  status: z.enum(["Новая", "В работе", "Завершено"]),
+  // atiCode: z.number().min(1, "Это поле обязательно"),
+});
+
 export default function Test() {
-  const { register, handleSubmit, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       secondname: "",
@@ -21,44 +41,59 @@ export default function Test() {
 
   const onSubmit: SubmitHandler<any> = (data) => {
     console.log(data);
+    reset();
   };
 
   return (
     <div className="container">
       <div className="max-w-2xl">
         <ThemeProvider theme="light">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <TextInput
               {...register("name")}
               label="Имя"
               placeholder="Ваше имя"
+              errorMessage={errors.name && "Поле обязательно для заполнения"}
+              validationState={errors.name ? "invalid" : undefined}
             />
+
             <TextInput
               {...register("secondname")}
               label="Фамилия"
               placeholder="Ваша фамилия"
+              errorMessage={
+                errors.secondname && "Поле обязательно для заполнения"
+              }
+              validationState={errors.secondname ? "invalid" : undefined}
             />
+
             <TextInput
               {...register("surname")}
               label="Отчество"
               placeholder="Ваше отчество"
+              errorMessage={errors.surname && "Поле обязательно для заполнения"}
+              validationState={errors.surname ? "invalid" : undefined}
             />
             <TextInput
               {...register("company")}
               label="Компания"
               placeholder="Ваша компания"
+              errorMessage={errors.company && "Поле обязательно для заполнения"}
+              validationState={errors.company ? "invalid" : undefined}
             />
             <TextInput
               {...register("phone")}
               label="Телефон"
               placeholder="Ваш телефон"
+              errorMessage={errors.phone && "Поле обязательно для заполнения"}
+              validationState={errors.phone ? "invalid" : undefined}
             />
             <TextArea {...register("comment")} placeholder="Комментарий" />
 
             <Controller
               name="status"
               control={control}
-              render={({ field: { onChange, value, ref } }) => (
+              render={({ field: { onChange } }) => (
                 <Select
                   onUpdate={(value) => onChange(value[0])}
                   defaultValue={["Новая"]}
@@ -72,9 +107,11 @@ export default function Test() {
 
             <TextInput
               type="number"
-              {...register("atiCode")}
+              {...(register("atiCode"), { valueAsNumber: true })}
               label="ATI код"
               placeholder="Ваш ATI код"
+              errorMessage={errors.atiCode && "Поле обязательно для заполнения"}
+              validationState={errors.atiCode ? "invalid" : undefined}
             />
             <button type="submit">ОК</button>
           </form>
