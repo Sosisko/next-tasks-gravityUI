@@ -1,7 +1,8 @@
 "use client";
 
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+// import { Table } from "antd";
+import { Table, TableColumnConfig, withTableActions } from "@gravity-ui/uikit";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { useEffect, useState } from "react";
@@ -29,67 +30,79 @@ export default function TasksList({ tasks, router }: tasksProps) {
     setTaskList(tasks);
   }, [tasks]);
 
-  const columns: ColumnsType[] = [
-    {
-      title: "№ заявки",
-      dataIndex: "idx",
-      key: "idx",
-    },
-    {
-      title: "Дата",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Компания",
-      dataIndex: "company",
-      key: "company",
-    },
-    {
-      title: "ФИО",
-      dataIndex: "fio",
-      key: "fio",
-    },
-    {
-      title: "Телефон",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Комментарий",
-      dataIndex: "comment",
-      key: "comment",
-    },
-    {
-      title: "Статус",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
-      title: "ATI код",
-      dataIndex: "atiCode",
-      key: "atiCode",
-    },
-    {
-      title: "",
-      dataIndex: "",
-      key: "x",
-      render: (record) => (
-        <>
-          <Button
-            onClick={() => onEditTask(record.id)}
-            className="mr-2"
-            icon={<EditOutlined />}
-          ></Button>
-          <Button
-            onClick={() => onDeleteTask(record.id)}
-            danger
-            icon={<DeleteOutlined />}
-          ></Button>
-        </>
-      ),
-    },
+  const columns = [
+    { id: "idx", name: "№ заявки" },
+    { id: "date", name: "Дата" },
+    { id: "company", name: "Компания" },
+    { id: "fio", name: "ФИО" },
+    { id: "phone", name: "Телефон" },
+    { id: "comment", name: "Комментарий" },
+    { id: "atiCode", name: "ATI код" },
+    { id: "status", name: "Статус" },
+    { id: "status", name: "ATI код" },
   ];
+
+  // const columns: TableColumnConfig<ColumnsType>[] = [
+  //   {
+  //     title: "№ заявки",
+  //     dataIndex: "idx",
+  //     key: "idx",
+  //   },
+  //   {
+  //     title: "Дата",
+  //     dataIndex: "date",
+  //     key: "date",
+  //   },
+  //   {
+  //     title: "Компания",
+  //     dataIndex: "company",
+  //     key: "company",
+  //   },
+  //   {
+  //     title: "ФИО",
+  //     dataIndex: "fio",
+  //     key: "fio",
+  //   },
+  //   {
+  //     title: "Телефон",
+  //     dataIndex: "phone",
+  //     key: "phone",
+  //   },
+  //   {
+  //     title: "Комментарий",
+  //     dataIndex: "comment",
+  //     key: "comment",
+  //   },
+  //   {
+  //     title: "Статус",
+  //     dataIndex: "status",
+  //     key: "status",
+  //   },
+  //   {
+  //     title: "ATI код",
+  //     dataIndex: "atiCode",
+  //     key: "atiCode",
+  //   },
+  //   {
+  //     title: "",
+  //     dataIndex: "",
+  //     key: "x",
+  //     render: (record) => (
+  //       <>
+  //         <Button
+  //           onClick={() => onEditTask(record.id)}
+  //           className="mr-2"
+  //           icon={<EditOutlined />}
+  //         ></Button>
+  //         <Button
+  //           onClick={() => onDeleteTask(record.id)}
+  //           danger
+  //           icon={<DeleteOutlined />}
+  //         ></Button>
+  //       </>
+  //     ),
+  //   },
+  // ];
 
   const onAddtask = (newTask: ITasks) => {
     setTaskList((prevTaskList) => [...prevTaskList, newTask]);
@@ -121,7 +134,6 @@ export default function TasksList({ tasks, router }: tasksProps) {
         {++idx}
       </a>
     ),
-    key: task.id,
     number: task.id,
     fio: `${task.secondname} ${task.name} ${task.surname}`,
     atiCode: (
@@ -143,17 +155,14 @@ export default function TasksList({ tasks, router }: tasksProps) {
     setIsEditTaskOpen(false);
     setCurrentTask(null);
   };
+  const MyTable = withTableActions(Table);
 
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        // onRow={(item) => ({
-        //   onClick: () => router.push(`/task-detail/${item.id}`),
-        // })}
-      />
+
+      <MyTable columns={columns} data={dataSource} />
+
       <EditTask
         isModalOpen={isEditTaskOpen}
         handleEditTask={handleEditTask}
