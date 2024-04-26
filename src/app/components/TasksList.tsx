@@ -2,7 +2,15 @@
 
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 // import { Table } from "antd";
-import { Table, TableColumnConfig, withTableActions } from "@gravity-ui/uikit";
+import {
+  Table,
+  TableAction,
+  TableActionGroup,
+  TableColumnConfig,
+  TableDataItem,
+  ThemeProvider,
+  withTableActions,
+} from "@gravity-ui/uikit";
 import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { useEffect, useState } from "react";
@@ -10,27 +18,20 @@ import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";
 import EditTask from "./EditTask";
 
-interface ColumnsType {
-  title: string;
-  dataIndex: string;
-  key: string;
-  render?: (record: any) => React.ReactNode;
-}
 interface tasksProps {
   tasks: ITasks[];
   router: any;
 }
-
+type TableActionConfig<I> = TableAction<I> | TableActionGroup<I>;
 export default function TasksList({ tasks, router }: tasksProps) {
   const [taskList, setTaskList] = useState(tasks);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState<boolean>(false);
   const [currentTask, setCurrentTask] = useState<ITasks | null>(null);
-
   useEffect(() => {
     setTaskList(tasks);
   }, [tasks]);
 
-  const columns = [
+  const columns: TableColumnConfig<TableDataItem>[] = [
     { id: "idx", name: "№ заявки" },
     { id: "date", name: "Дата" },
     { id: "company", name: "Компания" },
@@ -39,9 +40,24 @@ export default function TasksList({ tasks, router }: tasksProps) {
     { id: "comment", name: "Комментарий" },
     { id: "atiCode", name: "ATI код" },
     { id: "status", name: "Статус" },
-    { id: "status", name: "ATI код" },
   ];
-
+  const getRowActions = (): TableActionConfig<TableDataItem>[] => {
+    return [
+      {
+        text: "Редактировать",
+        handler: (tasks) => {
+          onEditTask(tasks.id);
+        },
+      },
+      {
+        text: "Удалить",
+        handler: (tasks) => {
+          onDeleteTask(tasks.id);
+        },
+        theme: "danger",
+      },
+    ];
+  };
   // const columns: TableColumnConfig<ColumnsType>[] = [
   //   {
   //     title: "№ заявки",
@@ -160,8 +176,13 @@ export default function TasksList({ tasks, router }: tasksProps) {
   return (
     <div>
       <AddTask onAddtask={onAddtask} />
-
-      <MyTable columns={columns} data={dataSource} />
+      <ThemeProvider theme="light">
+        <MyTable
+          columns={columns}
+          data={dataSource}
+          getRowActions={getRowActions}
+        />
+      </ThemeProvider>
 
       <EditTask
         isModalOpen={isEditTaskOpen}

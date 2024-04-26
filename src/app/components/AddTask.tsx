@@ -1,9 +1,10 @@
 "use client";
-import { Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button } from "@gravity-ui/uikit";
+import { Icon } from "@gravity-ui/uikit";
 import { useState } from "react";
 import MyModal from "./MyModal";
 import { ITasks } from "@/types/tasks";
+import PlusIcon from "./ui/PlusIcon";
 
 interface addTasksProps {
   onAddtask: (task: ITasks) => void;
@@ -12,10 +13,6 @@ interface addTasksProps {
 export default function AddTask({ onAddtask }: addTasksProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newTaskValue, setNewTaskValue] = useState<string>("");
-
-  const handleSubmitNewTask = () => {
-    console.log(newTaskValue);
-  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -26,9 +23,13 @@ export default function AddTask({ onAddtask }: addTasksProps) {
   };
   return (
     <>
-      <Button onClick={showModal} className="mt-4 mb-6" icon={<PlusOutlined />}>
-        Добавить заявку
-      </Button>
+      <div className="flex justify-end">
+        <Button onClick={showModal} view="raised" className="mt-4 mb-6">
+          Добавить заявку
+          <Icon data={PlusIcon} size={18} />
+        </Button>
+      </div>
+
       <MyModal
         onAddtask={onAddtask}
         isModalOpen={isModalOpen}
