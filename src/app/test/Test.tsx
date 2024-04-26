@@ -5,13 +5,6 @@ import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { useState } from "react";
 export default function Test() {
-  //   const emptyValues = {
-  //     name: "",
-  //     secondname: "",
-  //     surname: "",
-  //     company: "",
-  //     phone: "",
-  //   };
   const [selectedOption, setSelectedOption] = useState(["Новая"]);
   const [newTasksValue, setNewTasksValue] = useState({
     name: "",

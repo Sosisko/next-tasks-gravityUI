@@ -14,7 +14,8 @@
     "antd-mask-input": "^2.0.7",
     "next": "14.2.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.3"
   },
   "devDependencies": {
     "@gravity-ui/components": "^3.5.0",
