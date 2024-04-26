@@ -15,7 +15,7 @@ const formSchema = z.object({
   phone: z.string().min(1, "Это поле обязательно"),
   comment: z.string().optional(),
   status: z.enum(["Новая", "В работе", "Завершено"]),
-  // atiCode: z.number().min(1, "Это поле обязательно"),
+  atiCode: z.number().min(1, "Это поле обязательно"),
 });
 
 export default function Test() {
@@ -107,10 +107,10 @@ export default function Test() {
 
             <TextInput
               type="number"
-              {...(register("atiCode"), { valueAsNumber: true })}
+              {...register("atiCode", { valueAsNumber: true })}
               label="ATI код"
               placeholder="Ваш ATI код"
-              errorMessage={errors.atiCode && "Поле обязательно для заполнения"}
+              errorMessage={errors.atiCode && "Введите ваш ATI код"}
               validationState={errors.atiCode ? "invalid" : undefined}
             />
             <button type="submit">ОК</button>
