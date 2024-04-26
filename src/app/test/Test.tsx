@@ -12,6 +12,7 @@ export default function Test() {
   //     company: "",
   //     phone: "",
   //   };
+  const [selectedOption, setSelectedOption] = useState(["Новая"]);
   const [newTasksValue, setNewTasksValue] = useState({
     name: "",
     secondname: "",
@@ -19,23 +20,33 @@ export default function Test() {
     company: "",
     phone: "",
     comment: "",
-    status: "",
+    status: selectedOption[0],
     atiCode: "",
   });
 
+  const handleSelectChange = (value: string[]) => {
+    setSelectedOption(value);
+    console.log(value);
+    setNewTasksValue({
+      ...newTasksValue,
+      status: value[0],
+    });
+  };
+
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+
     console.log(newTasksValue);
-    setNewTasksValue({
-      name: "",
-      secondname: "",
-      surname: "",
-      company: "",
-      phone: "",
-      comment: "",
-      status: "",
-      atiCode: "",
-    });
+    // setNewTasksValue({
+    //   name: "",
+    //   secondname: "",
+    //   surname: "",
+    //   company: "",
+    //   phone: "",
+    //   comment: "",
+    //   status: [],
+    //   atiCode: "",
+    // });
   };
   const handleInputChange = (
     e:
@@ -95,15 +106,18 @@ export default function Test() {
               placeholder="Комментарий"
             />
 
-            <Select defaultValue={["Новая"]} className="w-full">
-              <Select.Option value={newTasksValue.status}>Новая</Select.Option>
-              <Select.Option value={newTasksValue.status}>
-                В работе
-              </Select.Option>
-              <Select.Option value={newTasksValue.status}>
-                Завершено
-              </Select.Option>
+            <Select
+              name="status"
+              defaultValue={["Новая"]}
+              className="w-full"
+              value={selectedOption}
+              onUpdate={handleSelectChange}
+            >
+              <Select.Option value="Новая">Новая</Select.Option>
+              <Select.Option value="В работе">В работе</Select.Option>
+              <Select.Option value="Завершено">Завершено</Select.Option>
             </Select>
+
             <TextInput
               type="number"
               value={newTasksValue.atiCode}
