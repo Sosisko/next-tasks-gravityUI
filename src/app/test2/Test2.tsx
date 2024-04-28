@@ -4,8 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import InputMask from "react-input-mask";
 import { Select, TextArea, TextInput, ThemeProvider } from "@gravity-ui/uikit";
-import { useState } from "react";
+import React, { ReactNode } from "react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Это поле обязательно"),
@@ -81,13 +82,38 @@ export default function Test() {
               errorMessage={errors.company && "Поле обязательно для заполнения"}
               validationState={errors.company ? "invalid" : undefined}
             />
-            <TextInput
-              {...register("phone")}
-              label="Телефон"
-              placeholder="Ваш телефон"
-              errorMessage={errors.phone && "Поле обязательно для заполнения"}
-              validationState={errors.phone ? "invalid" : undefined}
+
+            <Controller
+              name="phone"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <InputMask mask="+7(999)999-99-99" {...field}>
+                  <TextInput
+                    {...field}
+                    label="Телефон"
+                    placeholder="Ваш телефон"
+                    value={field.value}
+                    onChange={field.onChange}
+                    errorMessage={
+                      errors.phone && "Поле обязательно для заполнения"
+                    }
+                    validationState={errors.phone ? "invalid" : undefined}
+                  />
+                </InputMask>
+              )}
             />
+
+            {/* <InputMask mask="+7(000)000-00-00">
+              <TextInput
+                {...register("phone")}
+                label="Телефон"
+                placeholder="Ваш телефон"
+                errorMessage={errors.phone && "Поле обязательно для заполнения"}
+                validationState={errors.phone ? "invalid" : undefined}
+              />
+            </InputMask> */}
+
             <TextArea {...register("comment")} placeholder="Комментарий" />
 
             <Controller
