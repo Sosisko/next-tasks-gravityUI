@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import InputMask from "react-input-mask";
+import InputMask from "@mona-health/react-input-mask";
 import { Select, TextArea, TextInput, ThemeProvider } from "@gravity-ui/uikit";
-import React, { ReactNode } from "react";
+import React from "react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Это поле обязательно"),
@@ -88,13 +88,14 @@ export default function Test() {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <InputMask mask="+7(999)999-99-99" {...field}>
+                <InputMask {...field} mask="+7(999)999-99-99">
                   <TextInput
                     {...field}
                     label="Телефон"
                     placeholder="Ваш телефон"
                     value={field.value}
                     onChange={field.onChange}
+                    type="tel"
                     errorMessage={
                       errors.phone && "Поле обязательно для заполнения"
                     }
@@ -103,16 +104,6 @@ export default function Test() {
                 </InputMask>
               )}
             />
-
-            {/* <InputMask mask="+7(000)000-00-00">
-              <TextInput
-                {...register("phone")}
-                label="Телефон"
-                placeholder="Ваш телефон"
-                errorMessage={errors.phone && "Поле обязательно для заполнения"}
-                validationState={errors.phone ? "invalid" : undefined}
-              />
-            </InputMask> */}
 
             <TextArea {...register("comment")} placeholder="Комментарий" />
 
