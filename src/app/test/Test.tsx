@@ -7,6 +7,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "@mona-health/react-input-mask";
 import { Select, TextArea, TextInput, ThemeProvider } from "@gravity-ui/uikit";
 import React from "react";
+import { addTask } from "@/api/api";
 
 const formSchema = yup.object({
   name: yup.string().required("Это поле обязательно"),
@@ -59,7 +60,11 @@ export default function Test({ onCancel, onAddtask }: any) {
   });
 
   const onSubmit: SubmitHandler<any> = (data: IFormData) => {
-    onAddtask(data);
+    const newTask = addTask({
+      ...data,
+      
+    })
+    onAddtask(newTask);
     console.log(data);
     onCancel();
     reset();

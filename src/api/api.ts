@@ -13,7 +13,7 @@ export const getAllTasks = async (): Promise<ITasks[]> => {
   }
 };
 
-export const addTask = async (task: ITasks): Promise<ITasks> => {
+export const addTask = async (task: any): Promise<ITasks> => {
   try {
     const response = await fetch(`${baseUrl}/tasks`, {
       method: "POST",
