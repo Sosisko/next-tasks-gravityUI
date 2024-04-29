@@ -5,8 +5,14 @@ import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "@mona-health/react-input-mask";
-import { Select, TextArea, TextInput, ThemeProvider } from "@gravity-ui/uikit";
-import React from "react";
+import {
+  Button,
+  Select,
+  TextArea,
+  TextInput,
+  ThemeProvider,
+} from "@gravity-ui/uikit";
+import React, { useState } from "react";
 import { addTask } from "@/api/api";
 
 const formSchema = yup.object({
@@ -39,6 +45,7 @@ export interface IFormData {
 }
 
 export default function Test({ onCancel, onAddtask }: any) {
+  const [btnLoading, setBtnLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -59,11 +66,32 @@ export default function Test({ onCancel, onAddtask }: any) {
     },
   });
 
-  const onSubmit: SubmitHandler<any> = (data: IFormData) => {
-    const newTask = addTask({
+  const onSubmit: SubmitHandler<any> = async (data: IFormData) => {
+    setBtnLoading(true);
+    const capitFirstLet = (str: string) => {
+      return str
+        .split(" ")
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(" ");
+    };
+
+    const newTask = await addTask({
       ...data,
-      
-    })
+      date: new Date(Date.now()).toLocaleString("ru-RU", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      name: capitFirstLet(data.name.trim()),
+      secondname: capitFirstLet(data.secondname.trim()),
+      surname: capitFirstLet(data.surname.trim()),
+      company: data.company.trim(),
+    });
+
     onAddtask(newTask);
     console.log(data);
     onCancel();
@@ -72,7 +100,7 @@ export default function Test({ onCancel, onAddtask }: any) {
 
   return (
     <div className="container">
-      <div className="max-w-2xl">
+      <div className="max-w-2xl pt-8 pb-8">
         <ThemeProvider theme="light">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <TextInput
@@ -82,7 +110,6 @@ export default function Test({ onCancel, onAddtask }: any) {
               errorMessage={errors.name && "Поле обязательно для заполнения"}
               validationState={errors.name ? "invalid" : undefined}
             />
-            <p>{errors?.name?.message}</p>
 
             <TextInput
               {...register("secondname")}
@@ -140,6 +167,8 @@ export default function Test({ onCancel, onAddtask }: any) {
               control={control}
               render={({ field: { onChange } }) => (
                 <Select
+                  label="Статус"
+                  disabled
                   onUpdate={(value) => onChange(value[0])}
                   defaultValue={["Новая"]}
                 >
@@ -168,7 +197,14 @@ export default function Test({ onCancel, onAddtask }: any) {
                 />
               )}
             />
-            <button type="submit">ОК</button>
+            <div className="flex justify-end gap-4">
+              <Button loading={btnLoading} type="submit" view="action" size="l">
+                Добавить
+              </Button>
+              <Button onClick={onCancel} view="outlined-danger" size="l">
+                Отмена
+              </Button>
+            </div>
           </form>
         </ThemeProvider>
       </div>
