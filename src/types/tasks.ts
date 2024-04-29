@@ -8,5 +8,5 @@ export interface ITasks {
   phone: string;
   comment?: string;
   status: string;
-  atiCode: string;
+  atiCode: number;
 }

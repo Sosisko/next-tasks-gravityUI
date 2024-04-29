@@ -18,6 +18,8 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.3",
     "react-input-mask": "^3.0.0-alpha.2",
+    "use-mask-input": "^3.3.7",
+    "yup": "^1.4.0",
     "zod": "^3.23.4"
   },
   "devDependencies": {

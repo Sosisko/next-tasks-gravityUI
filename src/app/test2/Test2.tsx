@@ -1,5 +1,5 @@
 "use client";
-import { z } from "zod";
+import { ZodType, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
@@ -8,16 +8,28 @@ import InputMask from "@mona-health/react-input-mask";
 import { Select, TextArea, TextInput, ThemeProvider } from "@gravity-ui/uikit";
 import React from "react";
 
-const formSchema = z.object({
-  name: z.string().min(1, "Это поле обязательно"),
-  secondname: z.string().min(1, "Это поле обязательно"),
-  surname: z.string().min(1, "Это поле обязательно"),
-  company: z.string().min(1, "Это поле обязательно"),
-  phone: z.string().min(1, "Это поле обязательно"),
+const formSchema: ZodType<IFormData> = z.object({
+  name: z.string().min(1, "Это поле обязательно").trim(),
+  secondname: z.string().min(1, "Это поле обязательно").trim(),
+  surname: z.string().min(1, "Это поле обязательно").trim(),
+  company: z.string().min(1, "Это поле обязательно").trim(),
+  phone: z.string().min(16),
   comment: z.string().optional(),
   status: z.enum(["Новая", "В работе", "Завершено"]),
-  atiCode: z.number().min(1, "Это поле обязательно"),
+
+  atiCode: z.number().min(4, "Это поле обязательно"),
 });
+
+export interface IFormData {
+  name: string;
+  secondname: string;
+  surname: string;
+  company: string;
+  phone: string;
+  comment?: string;
+  status: string;
+  atiCode: number;
+}
 
 export default function Test() {
   const {
@@ -25,8 +37,8 @@ export default function Test() {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
-  } = useForm({
+    formState: { errors, isValid },
+  } = useForm<IFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -36,11 +48,11 @@ export default function Test() {
       phone: "",
       comment: "",
       status: "Новая",
-      atiCode: "",
+      atiCode: undefined,
     },
   });
 
-  const onSubmit: SubmitHandler<any> = (data) => {
+  const onSubmit: SubmitHandler<any> = (data: IFormData) => {
     console.log(data);
     reset();
   };
@@ -82,22 +94,24 @@ export default function Test() {
               errorMessage={errors.company && "Поле обязательно для заполнения"}
               validationState={errors.company ? "invalid" : undefined}
             />
-
             <Controller
-              name="phone"
               control={control}
-              defaultValue=""
+              name="phone"
               render={({ field }) => (
-                <InputMask {...field} mask="+7(999)999-99-99">
+                <InputMask
+                  {...field}
+                  mask="+7(999)999-99-99"
+                  placeholder="+7(___)___-__-__"
+                  onBlur={field.onBlur}
+                  onChange={field.onChange}
+                  maskPlaceholder={null}
+                >
                   <TextInput
-                    {...field}
                     label="Телефон"
                     placeholder="Ваш телефон"
-                    value={field.value}
-                    onChange={field.onChange}
-                    type="tel"
                     errorMessage={
-                      errors.phone && "Поле обязательно для заполнения"
+                      errors.phone &&
+                      "Это поле обязательно и должно содержать минимум 10 цифр"
                     }
                     validationState={errors.phone ? "invalid" : undefined}
                   />
@@ -130,6 +144,7 @@ export default function Test() {
               errorMessage={errors.atiCode && "Введите ваш ATI код"}
               validationState={errors.atiCode ? "invalid" : undefined}
             />
+
             <button type="submit">ОК</button>
           </form>
         </ThemeProvider>
