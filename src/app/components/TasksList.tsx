@@ -9,12 +9,11 @@ import {
   ThemeProvider,
   withTableActions,
 } from "@gravity-ui/uikit";
-import { Button } from "antd";
 import { ITasks } from "@/types/tasks";
 import { useEffect, useState } from "react";
 import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";
-import EditTask from "./EditTask";
+import EditTaskTest from "./EditTaskTest";
 
 interface tasksProps {
   tasks: ITasks[];
@@ -182,12 +181,18 @@ export default function TasksList({ tasks, router }: tasksProps) {
         />
       </ThemeProvider>
 
-      <EditTask
+      <EditTaskTest
         isModalOpen={isEditTaskOpen}
         handleEditTask={handleEditTask}
         handleCancel={handleCancel}
         task={currentTask || ({} as ITasks)}
       />
+      {/* <EditTask
+        isModalOpen={isEditTaskOpen}
+        handleEditTask={handleEditTask}
+        handleCancel={handleCancel}
+        task={currentTask || ({} as ITasks)}
+      /> */}
       <p>Количество заявок: {taskList.length}</p>
     </div>
   );

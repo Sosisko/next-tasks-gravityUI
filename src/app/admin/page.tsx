@@ -14,9 +14,13 @@ export default function AdminPanel() {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedTasks = await getAllTasks();
-      setTasks(fetchedTasks);
-      setIsLoading(false);
+      try {
+        const fetchedTasks = await getAllTasks();
+        setTasks(fetchedTasks);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchData();
