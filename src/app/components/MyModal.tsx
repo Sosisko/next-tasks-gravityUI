@@ -1,6 +1,8 @@
-import { Modal } from "antd";
-import MyForm from "./MyForm";
+"use client";
 import { ITasks } from "@/types/tasks";
+import { Button, Modal } from "@gravity-ui/uikit";
+import Test from "../test/Test";
+import { useState } from "react";
 
 interface ModalProps {
   isModalOpen: boolean;
@@ -18,14 +20,16 @@ export default function MyModal({
   setNewTaskValue,
 }: ModalProps) {
   return (
-    <Modal centered open={isModalOpen} onCancel={handleCancel} footer={null}>
-      <MyForm
+    <Modal open={isModalOpen} onClose={handleCancel}>
+      {/* <MyForm
         isModalOpen={isModalOpen}
         onAddtask={onAddtask}
         onCancel={handleCancel}
         newTaskValue={newTaskValue}
         setNewTaskValue={setNewTaskValue}
-      />
+      /> */}
+
+      <Test onCancel={handleCancel} onAddtask={onAddtask} />
     </Modal>
   );
 }

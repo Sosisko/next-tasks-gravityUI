@@ -37,7 +37,7 @@ export interface IFormData {
   atiCode: number | undefined;
 }
 
-export default function Test() {
+export default function Test({ onCancel, onAddtask }: any) {
   const {
     register,
     handleSubmit,
@@ -59,7 +59,9 @@ export default function Test() {
   });
 
   const onSubmit: SubmitHandler<any> = (data: IFormData) => {
+    onAddtask(data);
     console.log(data);
+    onCancel();
     reset();
   };
 
@@ -161,8 +163,6 @@ export default function Test() {
                 />
               )}
             />
-            <p>{errors?.atiCode?.message}</p>
-
             <button type="submit">ОК</button>
           </form>
         </ThemeProvider>
