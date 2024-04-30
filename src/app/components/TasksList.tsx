@@ -9,7 +9,7 @@ import {
   ThemeProvider,
   withTableActions,
 } from "@gravity-ui/uikit";
-import { ITasks } from "@/types/tasks";
+import { IFormData, ITasks } from "@/types/tasks";
 import { useEffect, useState } from "react";
 import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";

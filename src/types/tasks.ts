@@ -10,3 +10,13 @@ export interface ITasks {
   status: string;
   atiCode: number;
 }
+export interface IFormData {
+  name: string;
+  secondname: string;
+  surname: string;
+  company: string;
+  phone?: string;
+  comment?: string;
+  status?: string;
+  atiCode: number | undefined;
+}

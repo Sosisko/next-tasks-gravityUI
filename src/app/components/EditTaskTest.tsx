@@ -9,7 +9,7 @@ import {
   ThemeProvider,
 } from "@gravity-ui/uikit";
 
-import { ITasks } from "@/types/tasks";
+import { IFormData, ITasks } from "@/types/tasks";
 import { updateTask } from "@/api/api";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "@mona-health/react-input-mask";
@@ -24,16 +24,6 @@ const formSchema = yup.object({
   status: yup.string().optional(),
   atiCode: yup.number().positive().integer().required().min(4),
 });
-export interface IFormData {
-  name: string;
-  secondname: string;
-  surname: string;
-  company: string;
-  phone?: string;
-  comment?: string;
-  status?: string;
-  atiCode: number | undefined;
-}
 
 interface EditTaskProps {
   isModalOpen: boolean;
@@ -48,7 +38,6 @@ export default function EditTask({
   handleCancel,
   task,
 }: EditTaskProps) {
-  const [newTaskValue, setNewTaskValue] = useState(task);
   const [btnLoading, setBtnLoading] = useState(false);
   const {
     register,
@@ -61,14 +50,31 @@ export default function EditTask({
   });
 
   useEffect(() => {
-    setNewTaskValue(task);
-    console.log(task);
-    console.log(newTaskValue);
     reset();
   }, [task]);
 
-  const onSubmit = (values: IFormData) => {
-    console.log(task);
+  const onSubmit = (values: any) => {
+    const capitFirstLet = (str: string) =>
+      str.charAt(0).toUpperCase() + str.slice(1);
+    const newValues = {
+      ...values,
+      name: capitFirstLet(values.name.trim()),
+      secondname: capitFirstLet(values.secondname.trim()),
+      surname: capitFirstLet(values.surname.trim()),
+      company: values.company.trim(),
+      id: task.id,
+
+      date: new Date(Date.now()).toLocaleString("ru-RU", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    handleEditTask(newValues);
+    updateTask(newValues);
+
     console.log(values);
   };
 
@@ -80,7 +86,7 @@ export default function EditTask({
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <TextInput
                 {...register("name")}
-                defaultValue={newTaskValue.name}
+                defaultValue={task.name}
                 label="Имя"
                 placeholder="Ваше имя"
                 errorMessage={errors.name && "Поле обязательно для заполнения"}
@@ -121,6 +127,7 @@ export default function EditTask({
               <Controller
                 control={control}
                 name="phone"
+                defaultValue={task.phone}
                 render={({ field }) => (
                   <InputMask
                     {...field}
@@ -132,7 +139,7 @@ export default function EditTask({
                   >
                     <TextInput
                       label="Телефон"
-                      defaultValue={task.phone}
+                      // defaultValue={task.phone}
                       placeholder="Ваш телефон"
                       errorMessage={
                         errors.phone &&
@@ -153,11 +160,12 @@ export default function EditTask({
               <Controller
                 name="status"
                 control={control}
+                defaultValue={task.status}
                 render={({ field: { onChange } }) => (
                   <Select
                     label="Статус"
-                    onUpdate={(value) => onChange(value[0])}
                     defaultValue={[task.status]}
+                    onUpdate={(value) => onChange(value[0])}
                   >
                     <Select.Option value="Новая">Новая</Select.Option>
                     <Select.Option value="В работе">В работе</Select.Option>
