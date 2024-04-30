@@ -27,18 +27,21 @@ export default function AdminPanel() {
   }, []);
 
   return (
-    <div className="container">
-      <div className="flex items-center justify-center flex-col mt-6">
-        <h1 className="text-2xl font-bold">AdminPanel</h1>
-
-        {isLoading ? (
-          <ThemeProvider theme="light">
-            <Loader size="l" />
-          </ThemeProvider>
-        ) : (
-          <TasksList tasks={tasks} router={router} />
-        )}
+    <>
+      <div className="container">
+        <div className="flex items-center justify-center flex-col mt-6">
+          {isLoading ? (
+            <ThemeProvider theme="light">
+              <Loader size="l" />
+            </ThemeProvider>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold">AdminPanel</h1>
+              <TasksList tasks={tasks} setTasks={setTasks} router={router} />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

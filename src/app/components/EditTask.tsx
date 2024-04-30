@@ -20,9 +20,9 @@ const EditTask: React.FC<EditTaskProps> = ({
   task,
 }) => {
   const [form] = Form.useForm();
-  useEffect(() => {
-    form.setFieldsValue(task);
-  }, [form, task]);
+  // useEffect(() => {
+  //   form.setFieldsValue(task);
+  // }, [form, task]);
 
   const onFinish = (values: ITasks) => {
     const capitFirstLet = (str: string) =>

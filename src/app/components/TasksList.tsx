@@ -14,18 +14,20 @@ import { useEffect, useState } from "react";
 import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";
 import EditTaskTest from "./EditTaskTest";
+import EditTask from "./EditTask";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface tasksProps {
   tasks: ITasks[];
-  router: any;
+  setTasks: React.Dispatch<React.SetStateAction<ITasks[]>>;
+  router: AppRouterInstance;
 }
 type TableActionConfig<I> = TableAction<I> | TableActionGroup<I>;
-export default function TasksList({ tasks, router }: tasksProps) {
-  const [taskList, setTaskList] = useState(tasks);
+export default function TasksList({ tasks, setTasks, router }: tasksProps) {
   const [isEditTaskOpen, setIsEditTaskOpen] = useState<boolean>(false);
   const [currentTask, setCurrentTask] = useState<ITasks | null>(null);
   useEffect(() => {
-    setTaskList(tasks);
+    setTasks(tasks);
   }, [tasks]);
 
   const columns: TableColumnConfig<TableDataItem>[] = [
@@ -55,88 +57,27 @@ export default function TasksList({ tasks, router }: tasksProps) {
       },
     ];
   };
-  // const columns: TableColumnConfig<ColumnsType>[] = [
-  //   {
-  //     title: "№ заявки",
-  //     dataIndex: "idx",
-  //     key: "idx",
-  //   },
-  //   {
-  //     title: "Дата",
-  //     dataIndex: "date",
-  //     key: "date",
-  //   },
-  //   {
-  //     title: "Компания",
-  //     dataIndex: "company",
-  //     key: "company",
-  //   },
-  //   {
-  //     title: "ФИО",
-  //     dataIndex: "fio",
-  //     key: "fio",
-  //   },
-  //   {
-  //     title: "Телефон",
-  //     dataIndex: "phone",
-  //     key: "phone",
-  //   },
-  //   {
-  //     title: "Комментарий",
-  //     dataIndex: "comment",
-  //     key: "comment",
-  //   },
-  //   {
-  //     title: "Статус",
-  //     dataIndex: "status",
-  //     key: "status",
-  //   },
-  //   {
-  //     title: "ATI код",
-  //     dataIndex: "atiCode",
-  //     key: "atiCode",
-  //   },
-  //   {
-  //     title: "",
-  //     dataIndex: "",
-  //     key: "x",
-  //     render: (record) => (
-  //       <>
-  //         <Button
-  //           onClick={() => onEditTask(record.id)}
-  //           className="mr-2"
-  //           icon={<EditOutlined />}
-  //         ></Button>
-  //         <Button
-  //           onClick={() => onDeleteTask(record.id)}
-  //           danger
-  //           icon={<DeleteOutlined />}
-  //         ></Button>
-  //       </>
-  //     ),
-  //   },
-  // ];
 
   const onAddtask = (newTask: ITasks) => {
-    setTaskList((prevTaskList) => [...prevTaskList, newTask]);
+    setTasks((prevTaskList) => [...prevTaskList, newTask]);
   };
 
   const onEditTask = (id: number) => {
-    const taskToEdit = taskList.find((task) => task.id === id);
+    const taskToEdit = tasks.find((task) => task.id === id);
     if (taskToEdit) {
-      setIsEditTaskOpen(true);
       setCurrentTask(taskToEdit);
+      setIsEditTaskOpen(true);
     }
   };
 
   const onDeleteTask = (id: number) => {
     if (confirm("Точно удалить?")) {
-      setTaskList(taskList.filter((task) => task.id !== id));
+      setTasks(tasks.filter((task) => task.id !== id));
       deleteTask(id);
     }
   };
 
-  const dataSource = taskList.map((task, idx) => ({
+  const dataSource = tasks.map((task, idx) => ({
     ...task,
     // idx: ++idx,
     idx: (
@@ -157,8 +98,8 @@ export default function TasksList({ tasks, router }: tasksProps) {
   }));
 
   const handleEditTask = (updatedTask: ITasks) => {
-    setTaskList(
-      taskList.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    setTasks(
+      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
     setIsEditTaskOpen(false);
     setCurrentTask(null);
@@ -193,7 +134,7 @@ export default function TasksList({ tasks, router }: tasksProps) {
         handleCancel={handleCancel}
         task={currentTask || ({} as ITasks)}
       /> */}
-      <p>Количество заявок: {taskList.length}</p>
+      <p>Количество заявок: {tasks.length}</p>
     </div>
   );
 }

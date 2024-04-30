@@ -17,20 +17,13 @@ import { addTask } from "@/api/api";
 
 const formSchema = yup.object({
   name: yup.string().required("Это поле обязательно"),
-
   secondname: yup.string().required("Это поле обязательно"),
   surname: yup.string().required("Это поле обязательно"),
   company: yup.string().required("Это поле обязательно"),
   phone: yup.string().min(16),
   comment: yup.string().optional(),
   status: yup.string().optional(),
-
-  atiCode: yup
-    .number()
-    .positive()
-    .integer()
-    .required()
-    .min(6, "Это поле обязательно и должно содержать минимум 6 цифр"),
+  atiCode: yup.number().positive().integer().required().min(4),
 });
 
 export interface IFormData {
@@ -189,10 +182,7 @@ export default function Test({ onCancel, onAddtask }: any) {
                   onChange={field.onChange}
                   label="ATI код"
                   placeholder="Ваш ATI код"
-                  errorMessage={
-                    errors.atiCode &&
-                    "Это поле обязательно и должно содержать минимум 6 цифр"
-                  }
+                  errorMessage={errors.atiCode && "Это поле обязательно"}
                   validationState={errors.atiCode ? "invalid" : undefined}
                 />
               )}
