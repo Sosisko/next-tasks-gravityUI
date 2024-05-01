@@ -1,3 +1,4 @@
+"use client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {
@@ -14,15 +15,16 @@ import { updateTask } from "@/api/api";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import InputMask from "@mona-health/react-input-mask";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 const formSchema = yup.object({
   name: yup.string().required("Это поле обязательно"),
   secondname: yup.string().required("Это поле обязательно"),
   surname: yup.string().required("Это поле обязательно"),
   company: yup.string().required("Это поле обязательно"),
-  phone: yup.string().min(16),
+  // phone: yup.string().min(16),
   comment: yup.string().optional(),
   status: yup.string().optional(),
-  atiCode: yup.number().positive().integer().required().min(4),
+  // atiCode: yup.number().positive().integer().required().min(4),
 });
 
 interface EditTaskProps {
@@ -38,7 +40,7 @@ export default function EditTask({
   handleCancel,
   task,
 }: EditTaskProps) {
-  const [taskValue, setTaskValue] = useState(task);
+  const router = useRouter();
   const [btnLoading, setBtnLoading] = useState(false);
   const {
     register,
@@ -52,9 +54,10 @@ export default function EditTask({
 
   useEffect(() => {
     reset();
-    reset({ status: task.status });
-    setTaskValue(task);
-    console.log(task.status);
+    // reset({ status: task.status });
+    // reset({ phone: task.phone });
+    // reset({ atiCode: task.atiCode });
+    console.log(task);
   }, [task]);
 
   const onSubmit = (values: any) => {
@@ -79,7 +82,7 @@ export default function EditTask({
     };
     handleEditTask(newValues);
     updateTask(newValues);
-
+    router.refresh();
     console.log(values);
   };
 
@@ -87,6 +90,9 @@ export default function EditTask({
     reset();
   };
 
+  const getValue = (value: string) => {
+    return value;
+  };
   return (
     <Modal open={isModalOpen} onClose={close}>
       <div className="container">
@@ -133,7 +139,7 @@ export default function EditTask({
                 }
                 validationState={errors.company ? "invalid" : undefined}
               />
-              <Controller
+              {/* <Controller
                 control={control}
                 name="phone"
                 defaultValue={task.phone}
@@ -142,13 +148,12 @@ export default function EditTask({
                     {...field}
                     mask="+7(999)999-99-99"
                     placeholder="+7(___)___-__-__"
-                    onBlur={field.onBlur}
                     onChange={field.onChange}
                     maskPlaceholder={null}
                   >
                     <TextInput
                       label="Телефон"
-                      // defaultValue={task.phone}
+                      defaultValue={field.value}
                       placeholder="Ваш телефон"
                       errorMessage={
                         errors.phone &&
@@ -158,7 +163,7 @@ export default function EditTask({
                     />
                   </InputMask>
                 )}
-              />
+              /> */}
 
               <TextArea
                 {...register("comment")}
@@ -169,15 +174,18 @@ export default function EditTask({
               <Controller
                 name="status"
                 control={control}
-                defaultValue={task.status}
-                render={({ field: { onChange } }) => (
+                // defaultValue={task.status}
+                render={({ field: { onChange, value } }) => (
                   <Select
+                
                     label="Статус"
                     defaultValue={[task.status]}
+                    // value={}
                     onUpdate={(value) => {
                       onChange(value[0]);
                       console.log(value[0]);
                       console.log(task.status);
+                      
                     }}
                   >
                     <Select.Option value="Новая">Новая</Select.Option>
@@ -187,7 +195,7 @@ export default function EditTask({
                 )}
               />
 
-              <Controller
+              {/* <Controller
                 control={control}
                 name="atiCode"
                 defaultValue={task.atiCode as any}
@@ -202,7 +210,7 @@ export default function EditTask({
                     validationState={errors.atiCode ? "invalid" : undefined}
                   />
                 )}
-              />
+              />  */}
               <div className="flex justify-end gap-4">
                 <Button
                   loading={btnLoading}

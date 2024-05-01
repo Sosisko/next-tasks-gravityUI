@@ -9,10 +9,11 @@ import {
   ThemeProvider,
   withTableActions,
 } from "@gravity-ui/uikit";
-import { IFormData, ITasks } from "@/types/tasks";
+import { ITasks } from "@/types/tasks";
 import { useEffect, useState } from "react";
 import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";
+
 import EditTaskTest from "./EditTaskTest";
 import EditTask from "./EditTask";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";

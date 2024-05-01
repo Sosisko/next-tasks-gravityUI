@@ -1,8 +1,7 @@
 "use client";
 import { ITasks } from "@/types/tasks";
-import { Button, Modal } from "@gravity-ui/uikit";
-import Test from "../test/Test";
-import { useState } from "react";
+import { Modal } from "@gravity-ui/uikit";
+import MyForm from "./MyForm";
 
 interface ModalProps {
   isModalOpen: boolean;
@@ -29,7 +28,7 @@ export default function MyModal({
         setNewTaskValue={setNewTaskValue}
       /> */}
 
-      <Test onCancel={handleCancel} onAddtask={onAddtask} />
+      <MyForm onCancel={handleCancel} onAddtask={onAddtask} />
     </Modal>
   );
 }

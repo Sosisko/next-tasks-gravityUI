@@ -15,8 +15,8 @@ export interface IFormData {
   secondname: string;
   surname: string;
   company: string;
-  phone?: string;
+  phone: string;
   comment?: string;
-  status?: string;
+  status: string;
   atiCode: number | undefined;
 }
