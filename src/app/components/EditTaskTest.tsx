@@ -38,6 +38,7 @@ export default function EditTask({
   handleCancel,
   task,
 }: EditTaskProps) {
+  const [taskValue, setTaskValue] = useState(task);
   const [btnLoading, setBtnLoading] = useState(false);
   const {
     register,
@@ -51,6 +52,9 @@ export default function EditTask({
 
   useEffect(() => {
     reset();
+    reset({ status: task.status });
+    setTaskValue(task);
+    console.log(task.status);
   }, [task]);
 
   const onSubmit = (values: any) => {
@@ -62,6 +66,7 @@ export default function EditTask({
       secondname: capitFirstLet(values.secondname.trim()),
       surname: capitFirstLet(values.surname.trim()),
       company: values.company.trim(),
+
       id: task.id,
 
       date: new Date(Date.now()).toLocaleString("ru-RU", {
@@ -78,8 +83,12 @@ export default function EditTask({
     console.log(values);
   };
 
+  const close = () => {
+    reset();
+  };
+
   return (
-    <Modal open={isModalOpen} onClose={handleCancel}>
+    <Modal open={isModalOpen} onClose={close}>
       <div className="container">
         <div className="max-w-2xl pt-8 pb-8">
           <ThemeProvider theme="light">
@@ -165,7 +174,11 @@ export default function EditTask({
                   <Select
                     label="Статус"
                     defaultValue={[task.status]}
-                    onUpdate={(value) => onChange(value[0])}
+                    onUpdate={(value) => {
+                      onChange(value[0]);
+                      console.log(value[0]);
+                      console.log(task.status);
+                    }}
                   >
                     <Select.Option value="Новая">Новая</Select.Option>
                     <Select.Option value="В работе">В работе</Select.Option>
