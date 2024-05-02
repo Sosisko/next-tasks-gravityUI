@@ -97,9 +97,7 @@ export default function EditTask({
     // reset({phone: task.phone});
   };
 
-  const getValue = (value: string) => {
-    return value;
-  };
+
   return (
     <Modal open={isModalOpen} onClose={close}>
       <div className="container">
@@ -147,17 +145,39 @@ export default function EditTask({
                 validationState={errors.company ? "invalid" : undefined}
               />
 
-              <input
-                {...registerWithMask("phone", [
-                  "+7(999)999-99-99",
-                  "+7(___)___-__-__",
-                ])}
-                type="text"
-                // label="Телефон"
-                placeholder="Ваш телефон"
+              <Controller
+                control={control}
+                name="phone"
                 defaultValue={task.phone}
-              />
+                render={({ field }) => (
 
+                <InputMask
+                    {...field}
+                    mask="+7(999)999-99-99"
+                    placeholder="+7(___)___-__-__"
+                    onChange={field.onChange}
+                    maskPlaceholder={null}
+                  >
+
+                  <TextInput
+                    label="Телефон"
+                    placeholder="Ваш телефон"
+                    value={field.value}
+                    errorMessage={
+                      errors.phone &&
+                      "Это поле обязательно и должно содержать минимум 10 цифр"
+                    }
+                    validationState={errors.phone ? "invalid" : undefined}
+                  />  
+                </InputMask>
+
+
+
+
+                  
+                )}
+              />
+              {/* РАБОЧИЙ КОНТРОЛЛЕР БЕЗ МАСКИ
               <Controller
                 control={control}
                 name="phone"
@@ -175,7 +195,7 @@ export default function EditTask({
                     validationState={errors.phone ? "invalid" : undefined}
                   />
                 )}
-              />
+              /> */}
 
               {/* <Controller
                 control={control}
