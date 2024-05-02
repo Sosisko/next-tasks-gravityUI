@@ -13,8 +13,6 @@ import { ITasks } from "@/types/tasks";
 import { useEffect, useState } from "react";
 import { deleteTask } from "@/api/api";
 import AddTask from "../components/AddTask";
-
-import EditTaskTest from "./EditTaskTest";
 import EditTask from "./EditTask";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
@@ -80,7 +78,6 @@ export default function TasksList({ tasks, setTasks, router }: tasksProps) {
 
   const dataSource = tasks.map((task, idx) => ({
     ...task,
-    // idx: ++idx,
     idx: (
       <a
         onClick={() => router.push(`/task-detail/${task.id}`)}
@@ -89,13 +86,20 @@ export default function TasksList({ tasks, setTasks, router }: tasksProps) {
         {++idx}
       </a>
     ),
-    number: task.id,
     fio: `${task.secondname} ${task.name} ${task.surname}`,
     atiCode: (
       <a target="_blank" href={`https://ati.su/firms/${task.atiCode}/info`}>
         {task.atiCode}
       </a>
     ),
+    status:
+      task.status === "new"
+        ? "Новая"
+        : task.status === "inWork"
+        ? "В работе"
+        : task.status === "done"
+        ? "Завершено"
+        : task.status,
   }));
 
   const handleEditTask = (updatedTask: ITasks) => {
@@ -123,18 +127,12 @@ export default function TasksList({ tasks, setTasks, router }: tasksProps) {
         />
       </ThemeProvider>
 
-      <EditTaskTest
+      <EditTask
         isModalOpen={isEditTaskOpen}
         handleEditTask={handleEditTask}
         handleCancel={handleCancel}
         task={currentTask || ({} as ITasks)}
-      />
-      {/* <EditTask
-        isModalOpen={isEditTaskOpen}
-        handleEditTask={handleEditTask}
-        handleCancel={handleCancel}
-        task={currentTask || ({} as ITasks)}
-      /> */}
+      /> 
       <p>Количество заявок: {tasks.length}</p>
     </div>
   );

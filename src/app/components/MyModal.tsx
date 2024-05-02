@@ -20,14 +20,6 @@ export default function MyModal({
 }: ModalProps) {
   return (
     <Modal open={isModalOpen} onClose={handleCancel}>
-      {/* <MyForm
-        isModalOpen={isModalOpen}
-        onAddtask={onAddtask}
-        onCancel={handleCancel}
-        newTaskValue={newTaskValue}
-        setNewTaskValue={setNewTaskValue}
-      /> */}
-
       <MyForm onCancel={handleCancel} onAddtask={onAddtask} />
     </Modal>
   );

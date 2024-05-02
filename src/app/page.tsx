@@ -17,7 +17,6 @@ export default function Home() {
 
     fetchData();
   }, []);
-  console.log(tasks);
   return (
     <div className="container">
       {isLoading ? (

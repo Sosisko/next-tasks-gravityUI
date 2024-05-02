@@ -1,3 +1,4 @@
+"use client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {
@@ -9,17 +10,17 @@ import {
   ThemeProvider,
 } from "@gravity-ui/uikit";
 
-import { IFormData, ITasks } from "@/types/tasks";
+import { ITasks } from "@/types/tasks";
 import { updateTask } from "@/api/api";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import InputMask from "@mona-health/react-input-mask";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 const formSchema = yup.object({
-  name: yup.string().required("Это поле обязательно"),
-  secondname: yup.string().required("Это поле обязательно"),
-  surname: yup.string().required("Это поле обязательно"),
-  company: yup.string().required("Это поле обязательно"),
+  name: yup.string().required("Это поле обязательно").trim(),
+  secondname: yup.string().required("Это поле обязательно").trim(),
+  surname: yup.string().required("Это поле обязательно").trim(),
+  company: yup.string().required("Это поле обязательно").trim(),
   phone: yup.string().min(16),
   comment: yup.string().optional(),
   status: yup.string().optional(),
@@ -40,35 +41,39 @@ export default function EditTask({
   task,
 }: EditTaskProps) {
   const router = useRouter();
-  const [btnLoading, setBtnLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(formSchema),
   });
 
   useEffect(() => {
-    reset();
-    reset({ status: task.status });
-    reset({ phone: task.phone });
-  }, [task]);
+    if (isModalOpen) {
+      reset();
+      setValue("phone", task.phone);
+      setValue("status", task.status);
+      setValue("atiCode", task.atiCode);
+      // reset({ phone: task.phone});
+      // reset({ status: task.status });
+    }
+  }, [isModalOpen, task.phone, task.status, task.atiCode, task]);
 
   const onSubmit = (values: any) => {
     const capitFirstLet = (str: string) =>
       str.charAt(0).toUpperCase() + str.slice(1);
-    const newValues: ITasks = {
+    const newValues = {
       ...values,
       name: capitFirstLet(values.name.trim()),
       secondname: capitFirstLet(values.secondname.trim()),
       surname: capitFirstLet(values.surname.trim()),
       company: values.company.trim(),
-
       id: task.id,
-
       date: new Date(Date.now()).toLocaleString("ru-RU", {
         year: "numeric",
         month: "2-digit",
@@ -79,25 +84,12 @@ export default function EditTask({
     };
     handleEditTask(newValues);
     updateTask(newValues);
-    reset();
     router.refresh();
-    console.log(values);
   };
 
-  const close = () => {
-    reset();
-    handleCancel();
-  };
 
   return (
-    <Modal
-      open={isModalOpen}
-      onClose={close}
-      // onClose={() => {
-      //   reset();
-      //   handleCancel();
-      // }}
-    >
+    <Modal open={isModalOpen} onClose={handleCancel}>
       <div className="container">
         <div className="max-w-2xl pt-8 pb-8">
           <ThemeProvider theme="light">
@@ -142,7 +134,8 @@ export default function EditTask({
                 }
                 validationState={errors.company ? "invalid" : undefined}
               />
-              {/* <Controller
+
+              <Controller
                 control={control}
                 name="phone"
                 defaultValue={task.phone}
@@ -151,14 +144,13 @@ export default function EditTask({
                     {...field}
                     mask="+7(999)999-99-99"
                     placeholder="+7(___)___-__-__"
-                    onBlur={field.onBlur}
                     onChange={field.onChange}
                     maskPlaceholder={null}
                   >
                     <TextInput
                       label="Телефон"
-                      value={task.phone}
                       placeholder="Ваш телефон"
+                      value={field.value}
                       errorMessage={
                         errors.phone &&
                         "Это поле обязательно и должно содержать минимум 10 цифр"
@@ -167,29 +159,31 @@ export default function EditTask({
                     />
                   </InputMask>
                 )}
-              /> */}
+              />
 
               <TextArea
                 {...register("comment")}
                 placeholder="Комментарий"
-                value={task.comment}
+                defaultValue={task.comment}
               />
 
               <Controller
                 name="status"
                 control={control}
                 defaultValue={task.status}
-                render={({ field: { onChange } }) => (
+                render={({ field: { onChange, value } }) => (
                   <Select
                     label="Статус"
-                    value={[task.status]}
+                    defaultValue={[task.status]}
+                    value={[value] as any}
                     onUpdate={(value) => {
                       onChange(value[0]);
+
                     }}
                   >
-                    <Select.Option value="Новая">Новая</Select.Option>
-                    <Select.Option value="В работе">В работе</Select.Option>
-                    <Select.Option value="Завершено">Завершено</Select.Option>
+                    <Select.Option value="new">Новая</Select.Option>
+                    <Select.Option value="inWork">В работе</Select.Option>
+                    <Select.Option value="done">Завершено</Select.Option>
                   </Select>
                 )}
               />
@@ -201,7 +195,7 @@ export default function EditTask({
                 render={({ field }) => (
                   <TextInput
                     type="number"
-                    value={task.atiCode as any}
+                    defaultValue={task.atiCode as any}
                     onChange={field.onChange}
                     label="ATI код"
                     placeholder="Ваш ATI код"
@@ -212,12 +206,11 @@ export default function EditTask({
               />
               <div className="flex justify-end gap-4">
                 <Button
-                  loading={btnLoading}
                   type="submit"
                   view="action"
                   size="l"
                 >
-                  Добавить
+                  Сохранить
                 </Button>
                 <Button onClick={handleCancel} view="outlined-danger" size="l">
                   Отмена

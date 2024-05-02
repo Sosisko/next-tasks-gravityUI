@@ -86,7 +86,6 @@ export default function MyForm({ onCancel, onAddtask }: any) {
     });
 
     onAddtask(newTask);
-    console.log(data);
     onCancel();
     reset();
   };
@@ -165,9 +164,9 @@ export default function MyForm({ onCancel, onAddtask }: any) {
                   onUpdate={(value) => onChange(value[0])}
                   defaultValue={["Новая"]}
                 >
-                  <Select.Option value="Новая">Новая</Select.Option>
-                  <Select.Option value="В работе">В работе</Select.Option>
-                  <Select.Option value="Завершено">Завершено</Select.Option>
+                  <Select.Option value="new">Новая</Select.Option>
+                  <Select.Option value="inWork">В работе</Select.Option>
+                  <Select.Option value="done">Завершено</Select.Option>
                 </Select>
               )}
             />
