@@ -9,7 +9,7 @@ import {
   TextInput,
   ThemeProvider,
 } from "@gravity-ui/uikit";
-
+import { withMask, useHookFormMask } from "use-mask-input";
 import { IFormData, ITasks } from "@/types/tasks";
 import { updateTask } from "@/api/api";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -17,11 +17,11 @@ import InputMask from "@mona-health/react-input-mask";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 const formSchema = yup.object({
-  name: yup.string().required("Это поле обязательно"),
-  secondname: yup.string().required("Это поле обязательно"),
-  surname: yup.string().required("Это поле обязательно"),
-  company: yup.string().required("Это поле обязательно"),
-  // phone: yup.string().min(16),
+  name: yup.string().required("Это поле обязательно").trim(),
+  secondname: yup.string().required("Это поле обязательно").trim(),
+  surname: yup.string().required("Это поле обязательно").trim(),
+  company: yup.string().required("Это поле обязательно").trim(),
+  phone: yup.string().min(16),
   comment: yup.string().optional(),
   status: yup.string().optional(),
   // atiCode: yup.number().positive().integer().required().min(4),
@@ -41,24 +41,30 @@ export default function EditTask({
   task,
 }: EditTaskProps) {
   const router = useRouter();
+
   const [btnLoading, setBtnLoading] = useState(false);
   const {
     register,
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(formSchema),
   });
+  const registerWithMask = useHookFormMask(register);
 
   useEffect(() => {
-    reset();
-    reset({ status: task.status });
-    // reset({ phone: task.phone });
-    // reset({ atiCode: task.atiCode });
-    console.log(task);
-  }, [task]);
+    if (isModalOpen) {
+      console.log(task.phone);
+      reset();
+      setValue("phone", task.phone);
+      setValue("status", task.status);
+      // reset({ phone: task.phone});
+      // reset({ status: task.status });
+    }
+  }, [isModalOpen, task.phone, task.status, task]);
 
   const onSubmit = (values: any) => {
     const capitFirstLet = (str: string) =>
@@ -88,7 +94,7 @@ export default function EditTask({
 
   const close = () => {
     reset();
-    // reset({ status: task.status });
+    // reset({phone: task.phone});
   };
 
   const getValue = (value: string) => {
@@ -140,6 +146,37 @@ export default function EditTask({
                 }
                 validationState={errors.company ? "invalid" : undefined}
               />
+
+              <input
+                {...registerWithMask("phone", [
+                  "+7(999)999-99-99",
+                  "+7(___)___-__-__",
+                ])}
+                type="text"
+                // label="Телефон"
+                placeholder="Ваш телефон"
+                defaultValue={task.phone}
+              />
+
+              <Controller
+                control={control}
+                name="phone"
+                defaultValue={task.phone}
+                render={({ field }) => (
+                  <TextInput
+                    label="Телефон"
+                    placeholder="Ваш телефон"
+                    value={field.value}
+                    onChange={field.onChange}
+                    errorMessage={
+                      errors.phone &&
+                      "Это поле обязательно и должно содержать минимум 10 цифр"
+                    }
+                    validationState={errors.phone ? "invalid" : undefined}
+                  />
+                )}
+              />
+
               {/* <Controller
                 control={control}
                 name="phone"
@@ -151,10 +188,14 @@ export default function EditTask({
                     placeholder="+7(___)___-__-__"
                     onChange={field.onChange}
                     maskPlaceholder={null}
+                    
                   >
                     <TextInput
+                    {...field}
                       label="Телефон"
-                      defaultValue={field.value}
+                      defaultValue={task.phone}
+                      // value={field.value}
+                      // defaultValue={field.value}
                       placeholder="Ваш телефон"
                       errorMessage={
                         errors.phone &&
@@ -164,7 +205,7 @@ export default function EditTask({
                     />
                   </InputMask>
                 )}
-              /> */}
+              />   */}
 
               <TextArea
                 {...register("comment")}
@@ -181,13 +222,11 @@ export default function EditTask({
                     label="Статус"
                     defaultValue={[task.status]}
                     value={[value] as any}
-
                     onUpdate={(value) => {
                       onChange(value[0]);
                       console.log(value[0]);
                       console.log(value);
                       console.log(task.status);
-                      
                     }}
                   >
                     <Select.Option value="Новая">Новая</Select.Option>
