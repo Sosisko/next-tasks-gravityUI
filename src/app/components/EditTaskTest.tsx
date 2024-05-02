@@ -54,7 +54,7 @@ export default function EditTask({
 
   useEffect(() => {
     reset();
-    // reset({ status: task.status });
+    reset({ status: task.status });
     // reset({ phone: task.phone });
     // reset({ atiCode: task.atiCode });
     console.log(task);
@@ -88,6 +88,7 @@ export default function EditTask({
 
   const close = () => {
     reset();
+    // reset({ status: task.status });
   };
 
   const getValue = (value: string) => {
@@ -174,16 +175,17 @@ export default function EditTask({
               <Controller
                 name="status"
                 control={control}
-                // defaultValue={task.status}
+                defaultValue={task.status}
                 render={({ field: { onChange, value } }) => (
                   <Select
-                
                     label="Статус"
                     defaultValue={[task.status]}
-                    // value={}
+                    value={[value] as any}
+
                     onUpdate={(value) => {
                       onChange(value[0]);
                       console.log(value[0]);
+                      console.log(value);
                       console.log(task.status);
                       
                     }}
