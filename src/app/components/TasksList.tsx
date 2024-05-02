@@ -92,6 +92,7 @@ export default function TasksList({ tasks, setTasks, router }: tasksProps) {
         {task.atiCode}
       </a>
     ),
+    
     status:
       task.status === "new"
         ? "Новая"

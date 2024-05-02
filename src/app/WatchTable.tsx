@@ -36,6 +36,14 @@ const WatchTable: React.FC<tasksProps> = ({ tasks }) => {
           {task.atiCode}
         </a>
       ),
+      status:
+      task.status === "new"
+        ? "Новая"
+        : task.status === "inWork"
+        ? "В работе"
+        : task.status === "done"
+        ? "Завершено"
+        : task.status,
     };
   });
 
